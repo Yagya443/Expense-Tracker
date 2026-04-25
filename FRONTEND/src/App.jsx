@@ -12,7 +12,7 @@ import SignUp from "./Pages/SignUp";
 
 function App() {
     return (
-        <div>
+        <div className="bg-blue-100">
             <Routes>
                 <Route path='/' element={<Login />}/>
                 <Route path='/signup' element={<SignUp />}/>
