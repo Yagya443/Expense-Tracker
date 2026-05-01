@@ -1,21 +1,33 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+    const [showPassword, setShowPassword] = useState(false);
 
-      const [showPassword, setShowPassword] = useState(false);
-  
+    const imgRef = useRef();
 
+    const handleClick = () => {
+        imgRef.current.click();
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center ">
-            <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-                <div className="mb-6 text-center">
+            <div className="bg-white p-8  rounded-2xl shadow-lg w-full max-w-lg">
+                <div className="mb-4 text-center">
                     <h2 className="text-2xl font-bold text-gray-800">Hello</h2>
                     <p className="text-gray-500 text-sm">
                         Please enter your details to cretae account
                     </p>
+                </div>
+
+                <div className="border left-1/2 relative -translate-x-1/2 h-14 w-14" onClick={handleClick} >
+                    <input
+                        type="file"
+                        ref={imgRef}
+                        accept="image/* "
+                        className="hidden"
+                    />
                 </div>
 
                 <div className="space-y-4">
