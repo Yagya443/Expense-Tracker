@@ -15,7 +15,7 @@ import Expense from "./Pages/Expense";
 
 function App() {
     return (
-        <div className="bg-blue-100">
+        <div className="">
             <Routes>
                 <Route path='/' element={<Login />}/>
                 <Route path='/signup' element={<SignUp />}/>

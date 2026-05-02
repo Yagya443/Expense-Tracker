@@ -7,8 +7,8 @@ import { CiLogout } from "react-icons/ci";
 const Navbar = () => {
     return (
         <>
-            <div className="bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer ">Expense Tracker</div>
-            <div className="fixed h-screen w-64 border-r px-2 pt-6">
+            <div className="bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer fixed w-full z-50">Expense Tracker</div>
+            <div className="fixed h-screen w-64 border-r px-2 pt-20">
                 <div>
                     <img
                         className="h-20 w-20 rounded-full left-1/2 relative -translate-x-1/2"
