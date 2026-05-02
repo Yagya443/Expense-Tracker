@@ -2,12 +2,13 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const User = require("./srv/Models/user.model");
+const Expense = require("./srv/Models/expense.model");
 const jwt = require("jsonwebtoken");
+const { default: Income } = require("./srv/Models/income.model");;
 
 dotenv.config();
 
 const app = express();
-
 
 const connectDB = async () => {
     const conn = await mongoose.connect(process.env.CONNECTION_STRING);
@@ -18,7 +19,6 @@ connectDB();
 app.use(express.json());
 
 // Login
-
 app.post("/", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -64,7 +64,76 @@ app.post("/signup", async (req, res) => {
             message: "Account created successfully",
         });
     } catch (error) {
+        console.log(error);
+
         console.error(error);
+    }
+});
+
+const authMiddleware = (req, res, next) => {
+    try {
+        const token = req.headers.authorization?.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ message: "No token" });
+        }
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        return res.status(401).json({ message: "Invalid token" });
+    }
+};
+
+app.post("/expense", authMiddleware, async (req, res) => {
+    try {
+        const { title, amount, category } = req.body;
+
+        if (!title || !amount || !category) {
+            return res.status(400).json({ message: "All fields required" });
+        }
+
+        const expense = new Expense({
+            userId: req.user.id,
+            title,
+            amount,
+            category,
+        });
+
+        await expense.save();
+
+        res.status(201).json({
+            message: "Expense added",
+            expense,
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.post("/income",authMiddleware, async (req, res) => {
+    try {
+        const { title, amount, category } = req.body;
+
+        if (!title || !amount || !category) {
+            return res.status(400).json({ message: "All fields required" });
+        }
+
+        const income = new Income({
+            userId: req.user.id,
+            title,
+            amount,
+            category,
+        });
+
+        await income.save();
+
+        res.status(201).json({
+            message: "Income added",
+            income,
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
