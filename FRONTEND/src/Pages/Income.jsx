@@ -2,13 +2,18 @@ import React from "react";
 import Navbar from "../Components/Navbar";
 import { FiDownload } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa";
+import { useState } from "react";
+import IncomeModel from "../Components/Model/IncomeModel";
 
 const Income = () => {
+    const [openModel, setOpenModel] = useState(false);
+
     return (
         <div>
             <Navbar />
 
-            <div className="ml-64 pt-14 bg-gray-100 min-h-[100vh] pb-4">
+            <div className="ml-64 pt-14 bg-gray-100 min-h-[100vh] pb-4 relative">
+                            {openModel && <IncomeModel closeModal={()=>setOpenModel(false)}/>}
                 <div className="px-8 mt-8 grid grid-col-2 gap-8 ">
                     <div className="bg-white w-full h-[500px] shadow-md rounded-md">
                         <div className="flex justify-between p-4">
@@ -20,10 +25,13 @@ const Income = () => {
                                 </h2>
                             </div>
 
-                            <button className="border flex items-center h-8 px-4 py-2 rounded bg-violet-100 text-violet-700 font-semibold gap-2">
-                                {" "}
+                            <button
+                                className="border flex items-center h-8 px-4 py-2 rounded bg-violet-100 text-violet-700 font-semibold gap-2"
+                                onClick={() => setOpenModel(true)}
+                            >
                                 <FaPlus /> Add Income
                             </button>
+
                         </div>
                     </div>
                     <div className="bg-white min-h-[100px] rounded-md shadow-md relative py-4 px-4">
@@ -46,6 +54,7 @@ const Income = () => {
                                 Download
                             </button>
                         </div>
+
 
                         <div className="grid grid-cols-2 gap-2 mt-4 ">
                             <div className="flex justify-between items-center gap-4 px-6 py-2">

@@ -4,11 +4,14 @@ const mongoose = require("mongoose");
 const User = require("./srv/Models/user.model");
 const Expense = require("./srv/Models/expense.model");
 const jwt = require("jsonwebtoken");
-const { default: Income } = require("./srv/Models/income.model");;
+const Income = require("./srv/Models/income.model");
+const cors = require("cors");
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
 
 const connectDB = async () => {
     const conn = await mongoose.connect(process.env.CONNECTION_STRING);
@@ -24,13 +27,13 @@ app.post("/", async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
 
-        if (!user)
+        if (!user || user.password !== password)
             return res
                 .status(400)
                 .json({ message: "Invalid email or password" });
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-            expiresIn: "1d",
+            expiresIn: "30d",
         });
 
         res.json({
@@ -80,13 +83,17 @@ const authMiddleware = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (error) {
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).json({ message: "Token expired" });
+        }
         return res.status(401).json({ message: "Invalid token" });
     }
 };
 
+//Add expense
 app.post("/expense", authMiddleware, async (req, res) => {
     try {
-        const { title, amount, category } = req.body;
+        const { title, amount, category, date } = req.body;
 
         if (!title || !amount || !category) {
             return res.status(400).json({ message: "All fields required" });
@@ -97,6 +104,7 @@ app.post("/expense", authMiddleware, async (req, res) => {
             title,
             amount,
             category,
+            date: date || Date.now(),
         });
 
         await expense.save();
@@ -106,13 +114,26 @@ app.post("/expense", authMiddleware, async (req, res) => {
             expense,
         });
     } catch (error) {
+        console.log("ERROR:", error);
         res.status(500).json({ message: error.message });
     }
 });
 
-app.post("/income",authMiddleware, async (req, res) => {
+// view expense
+app.get("/expense", authMiddleware, async (req, res) => {
     try {
-        const { title, amount, category } = req.body;
+        const expense = await Expense.find({ userId: req.user.id });
+
+        res.status(200).json(expense);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+//Add Income
+app.post("/income", authMiddleware, async (req, res) => {
+    try {
+        const { title, amount, category, date } = req.body;
 
         if (!title || !amount || !category) {
             return res.status(400).json({ message: "All fields required" });
@@ -131,7 +152,6 @@ app.post("/income",authMiddleware, async (req, res) => {
             message: "Income added",
             income,
         });
-
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

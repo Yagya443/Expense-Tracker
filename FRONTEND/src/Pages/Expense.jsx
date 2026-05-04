@@ -1,14 +1,52 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Navbar from "../Components/Navbar";
 import { FiDownload } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa";
+import { useEffect } from "react";
+import { useState } from "react";
+import axios from "axios";
+import ExpenseModel from "../Components/Model/ExpenseModel";
+import { getStartOfDay } from "../Components/utils";
 
 const Expense = () => {
+    const [expense, setExpense] = useState([]);
+    const [openModel, setOpenModel] = useState(false);
+
+    const fetchExpense = useCallback (async () => {
+        const token = localStorage.getItem("token");
+
+        try {
+            const res = await axios.get(
+                `${import.meta.env.VITE_API_URL}/expense`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
+
+            setExpense(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    },[]);
+
+    useEffect(() => {
+        fetchExpense();
+    }, []);
+
     return (
         <>
             <Navbar />
 
             <div className="ml-64 pt-14 bg-gray-100 min-h-[100vh] pb-4">
+                {openModel && (
+                    <ExpenseModel
+                        closeModal={() => setOpenModel(false)}
+                        refreshExpenses={fetchExpense}
+                    />
+                )}
+
                 <div className="px-8 mt-8 grid grid-col-2 gap-8 ">
                     <div className="bg-white w-full h-[500px] shadow-md rounded-md">
                         <div className="flex justify-between p-4">
@@ -20,8 +58,10 @@ const Expense = () => {
                                 </h2>
                             </div>
 
-                            <button className="border flex items-center h-8 px-4 py-2 rounded bg-violet-100 text-violet-700 font-semibold gap-2">
-                                {" "}
+                            <button
+                                className="border flex items-center h-8 px-4 py-2 rounded bg-violet-100 text-violet-700 font-semibold gap-2"
+                                onClick={() => setOpenModel(true)}
+                            >
                                 <FaPlus /> Add Expenses
                             </button>
                         </div>
@@ -46,62 +86,39 @@ const Expense = () => {
                         </div>
 
                         <div className="grid grid-cols-2 gap-2 mt-4 ">
-                            <div className="flex justify-between items-center gap-4 px-6 py-2">
-                                <div className="flex items-center gap-4">
-                                    <img
-                                        className="h-12 rounded-full w-12 "
-                                        src="https://images.unsplash.com/photo-1776977496468-2823fb2daa01?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                    />
-                                    <div>
-                                        <h1 className="text-xl ">Shopping</h1>
-                                        <h1 className="text-md text-gray-500">
-                                            17 Feb 2026
-                                        </h1>
+                            {expense.map((expense, idx) => (
+                                <div
+                                    key={expense._id}
+                                    className="flex justify-between items-center gap-4 px-6 py-2 "
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div
+                                            className="h-12 rounded-full w-12 border"
+                                        >{expense.emoji}</div>
+                                        <div>
+                                            <h1 className="text-xl ">
+                                                {expense.category}
+                                            </h1>
+                                            <h1 className="text-md text-gray-500">
+                                                {/* {getTodayDate()} */}
+                                                {getStartOfDay(
+                                                    expense.createdAt,
+                                                )}
+                                            </h1>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
-                                    -$400
+                                    {expense.amount > 0 ? (
+                                        <div className="bg-green-200 text-green-600 rounded font-semibold px-4">
+                                            ${expense.amount}
+                                        </div>
+                                    ) : (
+                                        <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
+                                            ${expense.amount}
+                                        </div>
+                                    )}
                                 </div>
-                            </div>
-
-                            <div className="flex justify-between items-center gap-4 px-6 py-2">
-                                <div className="flex items-center gap-4">
-                                    <img
-                                        className="h-12 rounded-full w-12 "
-                                        src="https://images.unsplash.com/photo-1776977496468-2823fb2daa01?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                    />
-                                    <div>
-                                        <h1 className="text-xl ">Shopping</h1>
-                                        <h1 className="text-md text-gray-500">
-                                            17 Feb 2026
-                                        </h1>
-                                    </div>
-                                </div>
-
-                                <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
-                                    -$400
-                                </div>
-                            </div>
-
-                            <div className="flex justify-between items-center gap-4 px-6 py-2">
-                                <div className="flex items-center gap-4">
-                                    <img
-                                        className="h-12 rounded-full w-12 "
-                                        src="https://images.unsplash.com/photo-1776977496468-2823fb2daa01?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                    />
-                                    <div>
-                                        <h1 className="text-xl ">Shopping</h1>
-                                        <h1 className="text-md text-gray-500">
-                                            17 Feb 2026
-                                        </h1>
-                                    </div>
-                                </div>
-
-                                <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
-                                    -$400
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>

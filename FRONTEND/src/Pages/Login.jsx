@@ -1,10 +1,32 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import axios from "axios";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
+
+    const handleLogin = async () => {
+        try {
+            const res = await axios.post("http://localhost:5000/", {
+                email,
+                password,
+            });
+            console.log(res);
+
+            localStorage.setItem("token", res.data.token);
+
+            navigate("/dashboard");
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center ">
@@ -24,6 +46,7 @@ const Login = () => {
                             Email Address
                         </label>
                         <input
+                            onChange={(e) => setEmail(e.target.value)}
                             type="email"
                             placeholder="abc@example.com"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -36,6 +59,7 @@ const Login = () => {
                         </label>
 
                         <input
+                            onChange={(e) => setPassword(e.target.value)}
                             type={showPassword ? "text" : "password"}
                             placeholder="Enter password"
                             className="w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -49,7 +73,10 @@ const Login = () => {
                         </div>
                     </div>
 
-                    <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">
+                    <button
+                        className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+                        onClick={handleLogin}
+                    >
                         Login
                     </button>
 
