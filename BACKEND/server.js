@@ -3,8 +3,8 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const User = require("./srv/Models/user.model");
 const Expense = require("./srv/Models/expense.model");
-const jwt = require("jsonwebtoken");
 const Income = require("./srv/Models/income.model");
+const jwt = require("jsonwebtoken");
 const cors = require("cors");
 
 dotenv.config();
@@ -133,17 +133,18 @@ app.get("/expense", authMiddleware, async (req, res) => {
 //Add Income
 app.post("/income", authMiddleware, async (req, res) => {
     try {
-        const { title, amount, category, date } = req.body;
+        const { emoji, amount, category, date } = req.body;
 
-        if (!title || !amount || !category) {
+        if (!emoji || !amount || !category) {
             return res.status(400).json({ message: "All fields required" });
         }
 
         const income = new Income({
             userId: req.user.id,
-            title,
+            emoji,
             amount,
             category,
+            date:date || Date.now(),
         });
 
         await income.save();
@@ -156,6 +157,19 @@ app.post("/income", authMiddleware, async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+// view Income
+app.get("/income",authMiddleware,  async(req,res)=>{
+    try {
+        const income=await Income.find({userId: req.user.id})
+
+        res.status(200).json(income);
+    } catch (error) {
+        console.error(error);
+        
+    }
+
+})
 
 const PORT = process.env.PORT || 5000;
 

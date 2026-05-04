@@ -86,14 +86,14 @@ const Expense = () => {
                         </div>
 
                         <div className="grid grid-cols-2 gap-2 mt-2  ">
-                            {expense && expense.length > 0  ? (
+                            {expense && expense.length > 0 ? (
                                 expense.map((expense, idx) => (
                                     <div
                                         key={expense._id}
                                         className="flex justify-between items-center gap-4 px-6 py-2 "
                                     >
                                         <div className="flex items-center gap-4">
-                                            <div className="h-12 rounded-full w-12 border text-4xl bg-gray-200">
+                                            <div className="h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
                                                 {expense.emoji}
                                             </div>
                                             <div>
@@ -120,7 +120,9 @@ const Expense = () => {
                                     </div>
                                 ))
                             ) : (
-                                <h1 className="text-2xl font-semibold absolute left-1/2 -translate-x-1/2 ">Enter Something</h1>
+                                <h1 className="text-2xl font-semibold absolute left-1/2 -translate-x-1/2 ">
+                                    Enter Something
+                                </h1>
                             )}
                         </div>
                     </div>

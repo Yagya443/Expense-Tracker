@@ -6,39 +6,34 @@ import axios from "axios"
 
 
 const IncomeModel = ({ closeModal }) => {
-    const [title, setTitle] = useState("");
+    const [emoji, setEmoji] = useState("");
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState('Salary');
-    const [date, setDate] = useState(getTodayDate());
+    const [date, setDate] = useState(getStartOfDay(Date.now()));
 
     const handleAddIncome = async () => {
-        try {
-            if (!title) {
-                // return <p>Fill all the Fields</p>;
-                console.log("Error1");
-            }
-            if (!amount) {
-                // return <p>Fill all the Fields</p>;
-                console.log("Error2");
-            }
-            if (!category) {
-                // return <p>Fill all the Fields</p>;
-                console.log("Error3");
-            }
 
+        const token = localStorage.getItem("token");
+
+        try {
             await axios.post("http://localhost:5000/income", {
-                title,
+                emoji,
                 amount,
                 category,
                 date,
+            },{
+                headers:{
+                    Authorization:`bearer ${token}`
+                }
             });
 
-            console.log("added Successfully");
+            console.log("Added Successfully");
         } catch (error) {
             if (error.response?.status === 401) {
                 console.error("Session expired ");
             }
         }
+        closeModal()
     };
 
     return (
@@ -57,9 +52,9 @@ const IncomeModel = ({ closeModal }) => {
                 {/* Title */}
                 <input
                     type="text"
-                    placeholder="Title"
+                    placeholder="Select Emoji"
                     className="border w-full px-3 py-2 mb-3 rounded"
-                    onChange={(e) => setTitle(e.target.value)}
+                    onChange={(e) => setEmoji(e.target.value)}
                 />
 
                 <input
