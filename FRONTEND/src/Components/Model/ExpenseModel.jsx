@@ -15,7 +15,7 @@ const ExpenseModel = ({ closeModal,refreshExpenses }) => {
 
         const token = localStorage.getItem("token");
 
-        if(emoji.length>1){
+        if(emoji.length<2){
             return 
         }
 
@@ -62,7 +62,7 @@ const ExpenseModel = ({ closeModal,refreshExpenses }) => {
                 {/* emoji */}
                 <input
                     type="text"
-                    placeholder="Select Emoji (WindowsKey+.)"
+                    placeholder="Select emoji (WindowsKey+.)"
                     className="border w-full px-3 py-2 mb-3 rounded"
                     onChange={(e) => setEmoji(e.target.value)}
                 />

@@ -12,7 +12,7 @@ const Expense = () => {
     const [expense, setExpense] = useState([]);
     const [openModel, setOpenModel] = useState(false);
 
-    const fetchExpense = useCallback (async () => {
+    const fetchExpense = useCallback(async () => {
         const token = localStorage.getItem("token");
 
         try {
@@ -29,7 +29,7 @@ const Expense = () => {
         } catch (error) {
             console.error(error);
         }
-    },[]);
+    }, []);
 
     useEffect(() => {
         fetchExpense();
@@ -85,40 +85,43 @@ const Expense = () => {
                             </button>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 mt-4 ">
-                            {expense.map((expense, idx) => (
-                                <div
-                                    key={expense._id}
-                                    className="flex justify-between items-center gap-4 px-6 py-2 "
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <div
-                                            className="h-12 rounded-full w-12 border"
-                                        >{expense.emoji}</div>
-                                        <div>
-                                            <h1 className="text-xl ">
-                                                {expense.category}
-                                            </h1>
-                                            <h1 className="text-md text-gray-500">
-                                                {/* {getTodayDate()} */}
-                                                {getStartOfDay(
-                                                    expense.createdAt,
-                                                )}
-                                            </h1>
+                        <div className="grid grid-cols-2 gap-2 mt-2  ">
+                            {expense && expense.length > 0  ? (
+                                expense.map((expense, idx) => (
+                                    <div
+                                        key={expense._id}
+                                        className="flex justify-between items-center gap-4 px-6 py-2 "
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-12 rounded-full w-12 border text-4xl bg-gray-200">
+                                                {expense.emoji}
+                                            </div>
+                                            <div>
+                                                <h1 className="text-xl ">
+                                                    {expense.category}
+                                                </h1>
+                                                <h1 className="text-md text-gray-500">
+                                                    {getStartOfDay(
+                                                        expense.createdAt,
+                                                    )}
+                                                </h1>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {expense.amount > 0 ? (
-                                        <div className="bg-green-200 text-green-600 rounded font-semibold px-4">
-                                            ${expense.amount}
-                                        </div>
-                                    ) : (
-                                        <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
-                                            ${expense.amount}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
+                                        {expense.amount > 0 ? (
+                                            <div className="bg-green-200 text-green-600 rounded font-semibold px-4">
+                                                ${expense.amount}
+                                            </div>
+                                        ) : (
+                                            <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
+                                                ${expense.amount}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))
+                            ) : (
+                                <h1 className="text-2xl font-semibold absolute left-1/2 -translate-x-1/2 ">Enter Something</h1>
+                            )}
                         </div>
                     </div>
                 </div>

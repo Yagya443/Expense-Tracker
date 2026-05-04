@@ -93,15 +93,15 @@ const authMiddleware = (req, res, next) => {
 //Add expense
 app.post("/expense", authMiddleware, async (req, res) => {
     try {
-        const { title, amount, category, date } = req.body;
+        const { emoji, amount, category, date } = req.body;
 
-        if (!title || !amount || !category) {
+        if (!emoji || !amount || !category) {
             return res.status(400).json({ message: "All fields required" });
         }
 
         const expense = new Expense({
             userId: req.user.id,
-            title,
+            emoji,
             amount,
             category,
             date: date || Date.now(),
