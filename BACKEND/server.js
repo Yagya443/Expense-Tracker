@@ -45,6 +45,8 @@ app.post("/", async (req, res) => {
     }
 });
 
+
+
 //signup
 app.post("/signup", async (req, res) => {
     try {
@@ -89,6 +91,19 @@ const authMiddleware = (req, res, next) => {
         return res.status(401).json({ message: "Invalid token" });
     }
 };
+
+
+app.get("/user", authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
 
 //Add expense
 app.post("/expense", authMiddleware, async (req, res) => {
