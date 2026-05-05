@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Navbar from "../Components/Navbar";
 import { IoMdCard } from "react-icons/io";
 import { CiWallet } from "react-icons/ci";
@@ -11,8 +11,54 @@ import PieChart from "../Components/DashBoard/PieChart";
 import Bargraph from "../Components/DashBoard/BarGraph";
 import DashboardIncome from "../Components/DashBoard/DashboardIncome";
 import IncomeGraph from "../Components/DashBoard/IncomeGraph";
+import axios from "axios";
 
 const Dashboard = () => {
+    const [totalIncome, setTotalIncome] = useState(0);
+    const [totalExpense, setTotalExpense] = useState(0);
+
+    const fetchTotalIncome = useCallback(async () => {
+        const token = localStorage.getItem("token");
+
+        try {
+            const res = await axios.get(
+                `${import.meta.env.VITE_API_URL}/totalIncome`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
+
+            setTotalIncome(res.data.total);
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
+    const fetchTotalExpense = useCallback(async () => {
+        const token = localStorage.getItem("token");
+
+        try {
+            const res = await axios.get(
+                `${import.meta.env.VITE_API_URL}/totalExpense`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
+
+            setTotalExpense(res.data.total);
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchTotalIncome();
+        fetchTotalExpense();
+    }, []);
+
     return (
         <>
             <Navbar />
@@ -27,7 +73,7 @@ const Dashboard = () => {
                             <p className="text-xl text-gray-700">
                                 Total Balance
                             </p>
-                            <h2 className="text-2xl font-semibold">$12,345</h2>
+                            <h2 className="text-2xl font-semibold">${totalIncome+totalExpense}</h2>
                         </div>
                     </div>
 
@@ -39,7 +85,9 @@ const Dashboard = () => {
                             <p className="text-xl text-gray-700">
                                 Total Income
                             </p>
-                            <h2 className="text-2xl font-semibold">$12,345</h2>
+                            <h2 className="text-2xl font-semibold">
+                                ${totalIncome}
+                            </h2>
                         </div>
                     </div>
 
@@ -51,7 +99,7 @@ const Dashboard = () => {
                             <p className="text-xl text-gray-700">
                                 Total Expense
                             </p>
-                            <h2 className="text-2xl font-semibold">$12,345</h2>
+                            <h2 className="text-2xl font-semibold">${Math.abs(totalExpense)}</h2>
                         </div>
                     </div>
                 </div>
@@ -69,14 +117,13 @@ const Dashboard = () => {
                     <div className="bg-white min-h-[400px] rounded-md relative py-4 px-4 shadow-md">
                         <DashboardExpense />
                     </div>
-                    
+
                     <div className="bg-white min-h-[400px] rounded-md relative py-4 px-4 shadow-md">
                         <DashboardIncome />
                     </div>
                     <div className="bg-white min-h-[400px] rounded-md relative py-4 px-4 shadow-md">
                         <IncomeGraph />
                     </div>
-
                 </div>
             </div>
         </>

@@ -45,8 +45,6 @@ app.post("/", async (req, res) => {
     }
 });
 
-
-
 //signup
 app.post("/signup", async (req, res) => {
     try {
@@ -92,7 +90,6 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
-
 app.get("/user", authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
@@ -102,8 +99,6 @@ app.get("/user", authMiddleware, async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
-
 
 //Add expense
 app.post("/expense", authMiddleware, async (req, res) => {
@@ -159,7 +154,7 @@ app.post("/income", authMiddleware, async (req, res) => {
             emoji,
             amount,
             category,
-            date:date || Date.now(),
+            date: date || Date.now(),
         });
 
         await income.save();
@@ -174,17 +169,46 @@ app.post("/income", authMiddleware, async (req, res) => {
 });
 
 // view Income
-app.get("/income",authMiddleware,  async(req,res)=>{
+app.get("/income", authMiddleware, async (req, res) => {
     try {
-        const income=await Income.find({userId: req.user.id})
+        const income = await Income.find({ userId: req.user.id });
 
         res.status(200).json(income);
     } catch (error) {
         console.error(error);
-        
     }
+});
 
-})
+app.get("/totalIncome", authMiddleware, async (req, res) => {
+    try {
+        const income = await Income.find({ userId: req.user.id });
+
+        const total = income.reduce((prev, curr) => {
+            return prev + curr.amount;
+        }, 0);
+
+        return res.status(200).json({
+            total,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+app.get("/totalExpense", authMiddleware, async (req, res) => {
+    try {
+        const expense = await Expense.find({ userId: req.user.id });
+
+        const total = expense.reduce((prev, curr) => {
+            return prev + curr.amount;
+        }, 0);
+
+        return res.status(200).json({
+            total,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
 
 const PORT = process.env.PORT || 5000;
 

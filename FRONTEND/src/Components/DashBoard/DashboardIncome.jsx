@@ -4,6 +4,7 @@ import { FaArrowRight } from "react-icons/fa";
 
 const Dashboardincome = () => {
     const [income, setIncome] = useState([]);
+    
 
     const getCategoryEmoji = (cat) => {
         const map = {
