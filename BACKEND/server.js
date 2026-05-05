@@ -67,9 +67,9 @@ app.post("/signup", async (req, res) => {
             message: "Account created successfully",
         });
     } catch (error) {
+        return res.status(200).json({message:error})
         console.log(error);
-
-        console.error(error);
+        
     }
 });
 
@@ -103,15 +103,15 @@ app.get("/user", authMiddleware, async (req, res) => {
 //Add expense
 app.post("/expense", authMiddleware, async (req, res) => {
     try {
-        const { emoji, amount, category, date } = req.body;
+        const {amount, category, date } = req.body;
 
-        if (!emoji || !amount || !category) {
+        if ( !amount || !category) {
             return res.status(400).json({ message: "All fields required" });
         }
 
         const expense = new Expense({
             userId: req.user.id,
-            emoji,
+            
             amount,
             category,
             date: date || Date.now(),
@@ -143,15 +143,15 @@ app.get("/expense", authMiddleware, async (req, res) => {
 //Add Income
 app.post("/income", authMiddleware, async (req, res) => {
     try {
-        const { emoji, amount, category, date } = req.body;
+        const { amount, category, date } = req.body;
 
-        if (!emoji || !amount || !category) {
+        if (!amount || !category) {
             return res.status(400).json({ message: "All fields required" });
         }
 
         const income = new Income({
             userId: req.user.id,
-            emoji,
+            
             amount,
             category,
             date: date || Date.now(),

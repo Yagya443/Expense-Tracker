@@ -6,8 +6,7 @@ import axios from "axios"
 
 
 const IncomeModel = ({ closeModal }) => {
-    const [emoji, setEmoji] = useState("");
-    const [amount, setAmount] = useState("");
+   const [amount, setAmount] = useState("");
     const [category, setCategory] = useState('Salary');
     const [date, setDate] = useState(getStartOfDay(Date.now()));
 
@@ -17,7 +16,6 @@ const IncomeModel = ({ closeModal }) => {
 
         try {
             await axios.post("http://localhost:5000/income", {
-                emoji,
                 amount,
                 category,
                 date,
@@ -50,12 +48,7 @@ const IncomeModel = ({ closeModal }) => {
                 <h2 className="text-2xl font-semibold mb-4">Add Income</h2>
 
                 {/* Title */}
-                <input
-                    type="text"
-                    placeholder="Select Emoji"
-                    className="border w-full px-3 py-2 mb-3 rounded"
-                    onChange={(e) => setEmoji(e.target.value)}
-                />
+              
 
                 <input
                     type="number"

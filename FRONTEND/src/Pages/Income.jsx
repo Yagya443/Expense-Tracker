@@ -12,6 +12,18 @@ const Income = () => {
 
     const [income, setIncome] = useState([]);
 
+    const getCategoryEmoji = (cat) => {
+        const map = {
+            Salary: "💼",
+            Youtube: "🎥",
+            Stocks: "📈",
+            Crypto: "🪙",
+            Other: "💰",
+        };
+
+        return map[cat];
+    };
+
     const fetchIncome = async () => {
         const token = localStorage.getItem("token");
 
@@ -91,7 +103,9 @@ const Income = () => {
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
-                                                {income.emoji}
+                                                {getCategoryEmoji(
+                                                    income.category,
+                                                )}
                                             </div>
                                             <div>
                                                 <h1 className="text-xl ">

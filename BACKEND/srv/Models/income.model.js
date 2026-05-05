@@ -7,10 +7,6 @@ const incomeSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
-        emoji: {
-            type: String,
-            required: true,
-        },
         amount: {
             type: Number,
             required: true,

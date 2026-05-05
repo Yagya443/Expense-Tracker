@@ -5,7 +5,6 @@ import { getStartOfDay } from "../utils";
 import axios from "axios";
 
 const ExpenseModel = ({ closeModal,refreshExpenses }) => {
-    const [emoji, setEmoji] = useState("");
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("Food");
     const [date, setDate] = useState(getStartOfDay(Date.now()));
@@ -15,15 +14,10 @@ const ExpenseModel = ({ closeModal,refreshExpenses }) => {
 
         const token = localStorage.getItem("token");
 
-        if(emoji.length<2){
-            return 
-        }
-
         try {
             await axios.post(
                 "http://localhost:5000/expense",
                 {
-                    emoji,
                     amount: finalAmount,
                     category,
                     date,
@@ -59,13 +53,7 @@ const ExpenseModel = ({ closeModal,refreshExpenses }) => {
 
                 <h2 className="text-2xl font-semibold mb-4">Add Expense</h2>
 
-                {/* emoji */}
-                <input
-                    type="text"
-                    placeholder="Select emoji (WindowsKey+.)"
-                    className="border w-full px-3 py-2 mb-3 rounded"
-                    onChange={(e) => setEmoji(e.target.value)}
-                />
+               
 
                 <input
                     type="number"
@@ -78,8 +66,8 @@ const ExpenseModel = ({ closeModal,refreshExpenses }) => {
                     className="border w-full px-3 py-2 mb-3 rounded"
                     onChange={(e) => setCategory(e.target.value)}
                 >
-                    <option value="Travel">Travel</option>
                     <option value="Food">Food</option>
+                    <option value="Travel">Travel</option>
                     <option value="Shopping">Shopping</option>
                     <option value="Bills">Bills</option>
                     <option value="Other">Other</option>
