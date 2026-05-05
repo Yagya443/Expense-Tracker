@@ -1,54 +1,92 @@
-import React from "react";
+import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
-const DashboardIncome = () => {
+const Dashboardincome = () => {
+    const [income, setIncome] = useState([]);
+
+    const getCategoryEmoji = (cat) => {
+        const map = {
+            Salary: "💼",
+            Youtube: "🎥",
+            Stocks: "📈",
+            Crypto: "🪙",
+            Other: "💰",
+        };
+
+        return map[cat];
+    };
+
+    const categories = ["Salary", "Youtube", "Stocks", "Crypto", "Other"];
+
+    const categoryTotals = categories.map((cat) => {
+        const total = income
+            .filter((item) => item.category === cat)
+            .reduce((sum, item) => sum + item.amount, 0);
+
+        return {
+            category: cat,
+            total,
+        };
+    });
+
+    const fetchincome = useCallback(async () => {
+        const token = localStorage.getItem("token");
+
+        try {
+            const res = await axios.get(
+                `${import.meta.env.VITE_API_URL}/income`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
+
+            setIncome(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchincome();
+    }, [categoryTotals]);
+
     return (
-        <>
-            <h2 className="text-xl font-semibold">Income</h2>
+        <div>
+            <h2 className="text-xl font-semibold">incomes</h2>
             <button className="absolute rounded py-1 bg-gray-100 font-semibold px-3 right-4 top-4 flex items-center gap-2">
                 See All <FaArrowRight />
             </button>
-            <div className="flex flex-col gap-4 mt-4">
-                <div className="flex justify-between items-center gap-4 px-6">
-                    <div className="flex items-center gap-4">
-                        <img
-                            className="h-12 rounded-full w-12 "
-                            src="https://images.unsplash.com/photo-1776977496468-2823fb2daa01?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        />
-                        <div>
-                            <h1 className="text-xl ">Shopping</h1>
-                            <h1 className="text-md text-gray-500">
-                                17 Feb 2026
-                            </h1>
+            <div className="grid gap-2 mt-2">
+                {categoryTotals.map((item) => (
+                    <div
+                        key={item.category}
+                        className="flex justify-between items-center px-6 py-2"
+                    >
+                        <div className="flex items-center gap-4">
+                            <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-3xl">
+                                {getCategoryEmoji(item.category)}
+                            </div>
+
+                            <h1 className="text-xl">{item.category}</h1>
+                        </div>
+
+                        <div
+                            className={`rounded font-semibold px-4 ${
+                                item.total > 0
+                                    ? "bg-green-200 text-green-600"
+                                    : "bg-gray-200 text-gray-500"
+                            }`}
+                        >
+                            ${item.total}
                         </div>
                     </div>
-
-                    <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
-                        -$400
-                    </div>
-                </div>
-
-                <div className="flex justify-between items-center gap-4 px-6">
-                    <div className="flex items-center gap-4">
-                        <img
-                            className="h-12 rounded-full w-12 "
-                            src="https://images.unsplash.com/photo-1776977496468-2823fb2daa01?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        />
-                        <div>
-                            <h1 className="text-xl ">Shopping</h1>
-                            <h1 className="text-md text-gray-500">
-                                17 Feb 2026
-                            </h1>
-                        </div>
-                    </div>
-
-                    <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
-                        -$400
-                    </div>
-                </div>
+                ))}
             </div>
-        </>
+        </div>
     );
 };
 
-export default DashboardIncome;
+export default Dashboardincome;

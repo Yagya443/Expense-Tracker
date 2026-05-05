@@ -66,7 +66,7 @@ const DashboardExpense = () => {
                         className="flex justify-between items-center px-6 py-2"
                     >
                         <div className="flex items-center gap-4">
-                            <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-xl">
+                            <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-3xl">
                                 {getCategoryEmoji(item.category)}
                             </div>
 
