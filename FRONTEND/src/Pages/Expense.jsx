@@ -7,10 +7,27 @@ import { useState } from "react";
 import axios from "axios";
 import ExpenseModel from "../Components/Model/ExpenseModel";
 import { getStartOfDay } from "../Components/utils";
+import {
+    BarChart,
+    Bar,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+    Cell
+} from "recharts";
 
 const Expense = () => {
     const [expense, setExpense] = useState([]);
     const [openModel, setOpenModel] = useState(false);
+
+    const formattedExpense = expense.map((item) => ({
+        ...item,
+        amount: Math.abs(item.amount),
+    }));
 
     const getCategoryEmoji = (cat) => {
         const map = {
@@ -21,7 +38,7 @@ const Expense = () => {
             Other: "💸",
         };
 
-        return map[cat] ;
+        return map[cat];
     };
 
     const fetchExpense = useCallback(async () => {
@@ -38,6 +55,7 @@ const Expense = () => {
             );
 
             setExpense(res.data);
+            console.log(res.data);
         } catch (error) {
             console.error(error);
         }
@@ -77,6 +95,36 @@ const Expense = () => {
                                 <FaPlus /> Add Expenses
                             </button>
                         </div>
+                        <ResponsiveContainer width="100%" height={400}>
+                            <BarChart data={formattedExpense}>
+                                <CartesianGrid strokeDasharray="6 6" />
+                                <XAxis dataKey="category" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="amount">
+                                    {formattedExpense.map((entry, index) => (
+                                        <Cell
+                                            key={index}
+                                            fill={
+                                                entry.category === "Food"
+                                                    ? "#22c55e"
+                                                    : entry.category ===
+                                                        "Travel"
+                                                      ? "#3b82f6"
+                                                      : entry.category ===
+                                                          "Shopping"
+                                                        ? "#f59e0b"
+                                                        : entry.category ===
+                                                            "Bills"
+                                                          ? "#a855f7"
+                                                          : "#ef4444"
+                                            }
+                                        />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
                     </div>
                     <div className="bg-white min-h-[100px] rounded-md shadow-md relative py-4 px-4">
                         <h2 className="text-2xl font-semibold">All Expenses</h2>
@@ -106,7 +154,9 @@ const Expense = () => {
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
-                                                {getCategoryEmoji(expense.category)}
+                                                {getCategoryEmoji(
+                                                    expense.category,
+                                                )}
                                             </div>
                                             <div>
                                                 <h1 className="text-xl ">

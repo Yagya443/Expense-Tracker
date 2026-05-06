@@ -6,6 +6,18 @@ import { useState } from "react";
 import IncomeModel from "../Components/Model/IncomeModel";
 import axios from "axios";
 import { getStartOfDay } from "../Components/utils";
+import {
+    BarChart,
+    Bar,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+    Cell,
+} from "recharts";
 
 const Income = () => {
     const [openModel, setOpenModel] = useState(false);
@@ -72,6 +84,37 @@ const Income = () => {
                                 <FaPlus /> Add Income
                             </button>
                         </div>
+                        <ResponsiveContainer width="100%" height={400}>
+                            <BarChart data={income}>
+                                <CartesianGrid strokeDasharray="6 6" />
+
+                                <XAxis dataKey="category" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="amount" name="Income" fill="#ef4444">
+                                    {income.map((entry, index) => (
+                                        <Cell
+                                            key={index}
+                                            fill={
+                                                entry.category === "Salary"
+                                                    ? "#22c55e"
+                                                    : entry.category ===
+                                                        "Youtube"
+                                                      ? "#3b82f6"
+                                                      : entry.category ===
+                                                          "Crypto"
+                                                        ? "#f59e0b"
+                                                        : entry.category ===
+                                                            "Stocks"
+                                                          ? "#a855f7"
+                                                          : "#ef4444"
+                                            }
+                                        />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
                     </div>
                     <div className="bg-white min-h-[100px] rounded-md shadow-md relative py-4 px-4">
                         <h2 className="text-2xl font-semibold">
