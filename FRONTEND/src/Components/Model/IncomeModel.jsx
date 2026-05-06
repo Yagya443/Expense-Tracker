@@ -5,7 +5,7 @@ import { getStartOfDay } from "../utils";
 import axios from "axios"
 
 
-const IncomeModel = ({ closeModal }) => {
+const IncomeModel = ({ closeModal,refreshIncomes }) => {
    const [amount, setAmount] = useState("");
     const [category, setCategory] = useState('Salary');
     const [date, setDate] = useState(getStartOfDay(Date.now()));
@@ -32,6 +32,7 @@ const IncomeModel = ({ closeModal }) => {
             }
         }
         closeModal()
+        refreshIncomes()
     };
 
     return (

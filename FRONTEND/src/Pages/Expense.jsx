@@ -8,8 +8,7 @@ import axios from "axios";
 import ExpenseModel from "../Components/Model/ExpenseModel";
 import { getStartOfDay } from "../Components/utils";
 import {
-    BarChart,
-    Bar,
+    LineChart,
     Line,
     XAxis,
     YAxis,
@@ -17,7 +16,7 @@ import {
     Tooltip,
     Legend,
     ResponsiveContainer,
-    Cell
+    Cell,
 } from "recharts";
 
 const Expense = () => {
@@ -29,6 +28,15 @@ const Expense = () => {
         amount: Math.abs(item.amount),
     }));
 
+
+    const each_sum = formattedExpense.reduce((prev, curr) => {
+        if (!prev[curr.category]) {
+            prev[curr.category] = 0;
+        }
+        prev[curr.category] = prev[curr.category] + curr.amount;
+        return prev;
+    }, {});
+
     const getCategoryEmoji = (cat) => {
         const map = {
             Food: "🍔",
@@ -37,7 +45,6 @@ const Expense = () => {
             Shopping: "🛒",
             Other: "💸",
         };
-
         return map[cat];
     };
 
@@ -55,7 +62,6 @@ const Expense = () => {
             );
 
             setExpense(res.data);
-            console.log(res.data);
         } catch (error) {
             console.error(error);
         }
@@ -63,7 +69,14 @@ const Expense = () => {
 
     useEffect(() => {
         fetchExpense();
-    }, []);
+    }, [fetchExpense]);
+
+    const convertChartData = Object.entries(each_sum).map(
+        ([category, amount]) => ({
+            category,
+            amount,
+        }),
+    );
 
     return (
         <>
@@ -96,34 +109,19 @@ const Expense = () => {
                             </button>
                         </div>
                         <ResponsiveContainer width="100%" height={400}>
-                            <BarChart data={formattedExpense}>
-                                <CartesianGrid strokeDasharray="6 6" />
+                            <LineChart data={convertChartData}>
+                                <CartesianGrid strokeDasharray="2 2" />
                                 <XAxis dataKey="category" />
                                 <YAxis />
                                 <Tooltip />
-                                <Legend />
-                                <Bar dataKey="amount">
-                                    {formattedExpense.map((entry, index) => (
-                                        <Cell
-                                            key={index}
-                                            fill={
-                                                entry.category === "Food"
-                                                    ? "#22c55e"
-                                                    : entry.category ===
-                                                        "Travel"
-                                                      ? "#3b82f6"
-                                                      : entry.category ===
-                                                          "Shopping"
-                                                        ? "#f59e0b"
-                                                        : entry.category ===
-                                                            "Bills"
-                                                          ? "#a855f7"
-                                                          : "#ef4444"
-                                            }
-                                        />
-                                    ))}
-                                </Bar>
-                            </BarChart>
+
+                                <Line
+                                    type="monotone"
+                                    dataKey="amount"
+                                    stroke="#7c3aed "
+                                    strokeWidth={2}
+                                />
+                            </LineChart>
                         </ResponsiveContainer>
                     </div>
                     <div className="bg-white min-h-[100px] rounded-md shadow-md relative py-4 px-4">

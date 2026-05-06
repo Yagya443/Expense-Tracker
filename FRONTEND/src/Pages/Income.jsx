@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import Navbar from "../Components/Navbar";
 import { FiDownload } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa";
@@ -21,8 +21,25 @@ import {
 
 const Income = () => {
     const [openModel, setOpenModel] = useState(false);
-
     const [income, setIncome] = useState([]);
+
+
+    const each_sum = income.reduce((prev, curr) => {
+        if (!prev[curr.category]) {
+            prev[curr.category] = 0;
+        }
+
+        prev[curr.category] += curr.amount;
+
+        return prev;
+    }, {});
+
+    const convertChartData = Object.entries(each_sum).map(
+        ([category, amount]) => ({
+            category,
+            amount,
+        }),
+    );
 
     const getCategoryEmoji = (cat) => {
         const map = {
@@ -36,7 +53,7 @@ const Income = () => {
         return map[cat];
     };
 
-    const fetchIncome = async () => {
+    const fetchIncome = useCallback(async () => {
         const token = localStorage.getItem("token");
 
         try {
@@ -52,11 +69,11 @@ const Income = () => {
         } catch (error) {
             console.error(error);
         }
-    };
+    },[]);
 
     useEffect(() => {
         fetchIncome();
-    }, []);
+    }, [fetchIncome]);
 
     return (
         <div>
@@ -64,7 +81,9 @@ const Income = () => {
 
             <div className="ml-64 pt-14 bg-gray-100 min-h-[100vh] pb-4 relative">
                 {openModel && (
-                    <IncomeModel closeModal={() => setOpenModel(false)} />
+                    <IncomeModel closeModal={() => setOpenModel(false)} 
+                        refreshIncomes={fetchIncome}
+                    />
                 )}
                 <div className="px-8 mt-8 grid grid-col-2 gap-8 ">
                     <div className="bg-white w-full h-[500px] shadow-md rounded-md">
@@ -85,15 +104,13 @@ const Income = () => {
                             </button>
                         </div>
                         <ResponsiveContainer width="100%" height={400}>
-                            <BarChart data={income}>
+                            <BarChart data={convertChartData}>
                                 <CartesianGrid strokeDasharray="6 6" />
-
                                 <XAxis dataKey="category" />
                                 <YAxis />
                                 <Tooltip />
-                                <Legend />
-                                <Bar dataKey="amount" name="Income" fill="#ef4444">
-                                    {income.map((entry, index) => (
+                                <Bar dataKey="amount">
+                                    {convertChartData.map((entry, index) => (
                                         <Cell
                                             key={index}
                                             fill={
@@ -107,10 +124,27 @@ const Income = () => {
                                                         ? "#f59e0b"
                                                         : entry.category ===
                                                             "Stocks"
-                                                          ? "#a855f7"
-                                                          : "#ef4444"
+                                                          ? "#ef4444"
+                                                          : "#a855f7"
                                             }
                                         />
+                                        // <Cell
+                                        //     key={index}
+                                        //     fill={
+                                        //         entry.category === "Food"
+                                        //             ? "#22c55e"
+                                        //             : entry.category ===
+                                        //                 "Travel"
+                                        //               ? "#3b82f6"
+                                        //               : entry.category ===
+                                        //                   "Shopping"
+                                        //                 ? "#f59e0b"
+                                        //                 : entry.category ===
+                                        //                     "Bills"
+                                        //                     ? "#ef4444"
+                                        //                     : "#a855f7"
+                                        //     }
+                                        // />
                                     ))}
                                 </Bar>
                             </BarChart>
