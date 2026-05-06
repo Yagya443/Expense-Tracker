@@ -1,14 +1,36 @@
+import axios from "axios";
 import React, { useRef, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const navigate=useNavigate()
 
     const imgRef = useRef();
 
     const handleClick = () => {
         imgRef.current.click();
+    };
+
+    const handleSignUp = async () => {
+        try {
+            const res = await axios.post(
+                `${import.meta.env.VITE_API_URL}/signup`,
+                {
+                    name,
+                    email,
+                    password,
+                },
+            );
+            navigate('/dashboard')
+        } catch (error) {
+            console.log(error.response?.data || error.message);
+        }
     };
 
     return (
@@ -21,7 +43,10 @@ const Login = () => {
                     </p>
                 </div>
 
-                <div className="border left-1/2 relative -translate-x-1/2 h-14 w-14" onClick={handleClick} >
+                <div
+                    className="border left-1/2 relative -translate-x-1/2 h-14 w-14"
+                    onClick={handleClick}
+                >
                     <input
                         type="file"
                         ref={imgRef}
@@ -37,6 +62,7 @@ const Login = () => {
                         </label>
                         <input
                             placeholder="Enter Name"
+                            onChange={(e) => setName(e.target.value)}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
                     </div>
@@ -47,6 +73,7 @@ const Login = () => {
                         </label>
                         <input
                             type="email"
+                            onChange={(e) => setEmail(e.target.value)}
                             placeholder="abc@example.com"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
@@ -59,6 +86,7 @@ const Login = () => {
 
                         <input
                             type={showPassword ? "text" : "password"}
+                            onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter password"
                             className="w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
@@ -71,7 +99,10 @@ const Login = () => {
                         </div>
                     </div>
 
-                    <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">
+                    <button
+                        className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+                        onClick={handleSignUp}
+                    >
                         Sign In
                     </button>
 

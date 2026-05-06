@@ -1,9 +1,12 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const DashboardExpense = () => {
     const [expense, setExpense] = useState([]);
+
+    const navigate = useNavigate();
 
     const getCategoryEmoji = (cat) => {
         const map = {
@@ -14,7 +17,7 @@ const DashboardExpense = () => {
             Other: "💸",
         };
 
-        return map[cat] ;
+        return map[cat];
     };
 
     const categories = ["Food", "Travel", "Bills", "Shopping", "Other"];
@@ -56,7 +59,10 @@ const DashboardExpense = () => {
     return (
         <div>
             <h2 className="text-xl font-semibold">Expenses</h2>
-            <button className="absolute rounded py-1 bg-gray-100 font-semibold px-3 right-4 top-4 flex items-center gap-2">
+            <button className="absolute rounded py-1 bg-gray-100 font-semibold px-3 right-4 top-4 flex items-center gap-2"
+                onClick={()=>navigate('/expense')}
+                
+            >
                 See All <FaArrowRight />
             </button>
             <div className="grid gap-2 mt-2">

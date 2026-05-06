@@ -54,6 +54,8 @@ app.post("/signup", async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ message: "User already exists" });
         }
+        console.log("hello");
+        
 
         const user = new User({
             name,
@@ -67,9 +69,7 @@ app.post("/signup", async (req, res) => {
             message: "Account created successfully",
         });
     } catch (error) {
-        return res.status(200).json({message:error})
-        console.log(error);
-        
+        return res.status(200).json({message:error.message})
     }
 });
 
