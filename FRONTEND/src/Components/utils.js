@@ -13,4 +13,26 @@ export const loginImage = (name) => {
     return initials;
 };
 
+export const getExpenseEmoji = (cat) => {
+    const map = {
+        Food: "🍔",
+        Travel: "✈️",
+        Bills: "💡",
+        Shopping: "🛒",
+        Other: "💸",
+    };
 
+    return map[cat];
+};
+
+export const getIncomeEmoji = (cat) => {
+    const map = {
+        Salary: "💼",
+        Youtube: "🎥",
+        Stocks: "📈",
+        Crypto: "🪙",
+        Other: "💰",
+    };
+
+    return map[cat];
+};

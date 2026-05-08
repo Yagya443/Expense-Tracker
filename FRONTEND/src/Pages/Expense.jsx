@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import ExpenseModel from "../Components/Model/ExpenseModel";
-import { getStartOfDay } from "../Components/utils";
+import { getExpenseEmoji, getStartOfDay } from "../Components/utils";
 import {
     LineChart,
     Line,
@@ -37,16 +37,6 @@ const Expense = () => {
         return prev;
     }, {});
 
-    const getCategoryEmoji = (cat) => {
-        const map = {
-            Food: "🍔",
-            Travel: "✈️",
-            Bills: "💡",
-            Shopping: "🛒",
-            Other: "💸",
-        };
-        return map[cat];
-    };
 
     const fetchExpense = useCallback(async () => {
         const token = localStorage.getItem("token");
@@ -152,7 +142,7 @@ const Expense = () => {
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
-                                                {getCategoryEmoji(
+                                                {getExpenseEmoji(
                                                     expense.category,
                                                 )}
                                             </div>

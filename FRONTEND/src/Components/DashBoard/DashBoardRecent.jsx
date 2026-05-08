@@ -1,51 +1,85 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
+import { getExpenseEmoji, getIncomeEmoji, getStartOfDay } from "../utils";
 
 const DashBoardRecent = () => {
+    const [recentTran, setRecentTran] = useState(null);
+
+    const fetchRecentTranc = async () => {
+        const token = localStorage.getItem("token");
+        try {
+            const res = await axios.get(
+                `${import.meta.env.VITE_API_URL}/recent-transaction`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
+            setRecentTran(res.data);
+            console.log("Hello");
+            res.status(200).json(recentTransaction);
+        } catch (error) {
+            return;
+            res.status(401).json({ message: error.message });
+        }
+    };
+
+    useEffect(() => {
+        fetchRecentTranc();
+    }, []);
+
     return (
         <>
             <h2 className="text-xl font-semibold">Recent Transactions</h2>
             <button className="absolute rounded py-1 bg-gray-100 font-semibold px-3 right-4 top-4 flex items-center gap-2">
                 See All <FaArrowRight />
             </button>
-            <div className="flex flex-col gap-4 mt-4">
-                <div className="flex justify-between items-center gap-4 px-6">
-                    <div className="flex items-center gap-4">
-                        <img
-                            className="h-12 rounded-full w-12 "
-                            src="https://images.unsplash.com/photo-1776977496468-2823fb2daa01?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        />
-                        <div>
-                            <h1 className="text-xl ">Shopping</h1>
-                            <h1 className="text-md text-gray-500">
-                                17 Feb 2026
-                            </h1>
+            <div className="grid grid-cols-2     gap-2 mt-4 ">
+                {recentTran && recentTran.length > 0 ? (
+                    recentTran.map((recentTran, idx) => (
+                        <div
+                            key={recentTran._id}
+                            className="flex justify-between items-center gap-4 px-6 py-2 "
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className="h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
+                                    {
+                                        
+                                    }
+                                    {getIncomeEmoji(recentTran.category)}
+
+                                    ||
+                                    {getExpenseEmoji(recentTran.category)}
+
+                                </div>
+                                <div>
+                                    <h1 className="text-xl ">
+                                        {recentTran.category}
+                                    </h1>
+                                    <h1 className="text-md text-gray-500">
+                                        {getStartOfDay(recentTran.createdAt)}
+                                    </h1>
+                                </div>
+                            </div>
+
+                            {recentTran.amount > 0 ? (
+                                <div className="bg-green-200 text-green-600 rounded font-semibold px-4">
+                                    ${recentTran.amount}
+                                </div>
+                            ) : (
+                                <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
+                                    ${recentTran.amount}
+                                </div>
+                            )}
                         </div>
-                    </div>
-
-                    <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
-                        -$400
-                    </div>
-                </div>
-
-                <div className="flex justify-between items-center gap-4 px-6">
-                    <div className="flex items-center gap-4">
-                        <img
-                            className="h-12 rounded-full w-12 "
-                            src="https://images.unsplash.com/photo-1776977496468-2823fb2daa01?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        />
-                        <div>
-                            <h1 className="text-xl ">Shopping</h1>
-                            <h1 className="text-md text-gray-500">
-                                17 Feb 2026
-                            </h1>
-                        </div>
-                    </div>
-
-                    <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
-                        -$400
-                    </div>
-                </div>
+                    ))
+                ) : (
+                    <h1 className="text-2xl font-semibold absolute left-1/2 -translate-x-1/2 ">
+                        Enter Something
+                    </h1>
+                )}
             </div>
         </>
     );

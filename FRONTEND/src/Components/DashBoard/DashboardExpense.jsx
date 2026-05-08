@@ -2,13 +2,14 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { getExpenseEmoji } from "../utils";
 
 const DashboardExpense = () => {
     const [expense, setExpense] = useState([]);
 
     const navigate = useNavigate();
 
-    const getCategoryEmoji = (cat) => {
+    const getExpenseEmoji = (cat) => {
         const map = {
             Food: "🍔",
             Travel: "✈️",
@@ -73,7 +74,7 @@ const DashboardExpense = () => {
                     >
                         <div className="flex items-center gap-4">
                             <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-3xl">
-                                {getCategoryEmoji(item.category)}
+                                {getExpenseEmoji(item.category)}
                             </div>
 
                             <h1 className="text-xl">{item.category}</h1>

@@ -5,7 +5,7 @@ import { FaPlus } from "react-icons/fa";
 import { useState } from "react";
 import IncomeModel from "../Components/Model/IncomeModel";
 import axios from "axios";
-import { getStartOfDay } from "../Components/utils";
+import { getIncomeEmoji, getStartOfDay } from "../Components/utils";
 import {
     BarChart,
     Bar,
@@ -41,17 +41,7 @@ const Income = () => {
         }),
     );
 
-    const getCategoryEmoji = (cat) => {
-        const map = {
-            Salary: "💼",
-            Youtube: "🎥",
-            Stocks: "📈",
-            Crypto: "🪙",
-            Other: "💰",
-        };
-
-        return map[cat];
-    };
+    
 
     const fetchIncome = useCallback(async () => {
         const token = localStorage.getItem("token");
@@ -180,7 +170,7 @@ const Income = () => {
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
-                                                {getCategoryEmoji(
+                                                {getIncomeEmoji(
                                                     income.category,
                                                 )}
                                             </div>

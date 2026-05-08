@@ -138,6 +138,20 @@ app.get("/expense", authMiddleware, async (req, res) => {
     }
 });
 
+app.get("/recent-transaction", authMiddleware, async (req, res) => {
+    try {
+        const income = await Expense.find({ userId: req.user.id });
+        const expense = await Expense.find({ userId: req.user.id });
+
+        recentTransaction=[...income,...expense]
+
+
+        res.status(200).json(recentTransaction);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 //Add Income
 app.post("/income", authMiddleware, async (req, res) => {
     try {
@@ -192,6 +206,7 @@ app.get("/totalIncome", authMiddleware, async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 });
+
 app.get("/totalExpense", authMiddleware, async (req, res) => {
     try {
         const expense = await Expense.find({ userId: req.user.id });
