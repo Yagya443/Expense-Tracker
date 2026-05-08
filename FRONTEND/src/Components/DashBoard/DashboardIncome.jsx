@@ -48,18 +48,18 @@ const Dashboardincome = () => {
 
     return (
         <div>
-            <h2 className="text-xl font-semibold">incomes</h2>
+            <h2 className="text-xl font-semibold">Incomes</h2>
             <button className="absolute rounded py-1 bg-gray-100 font-semibold px-3 right-4 top-4 flex items-center gap-2"
                 onClick={()=>navigate('/income')}
 
             >
                 See All <FaArrowRight />
             </button>
-            <div className="grid gap-2 mt-2">
+            <div className="grid gap-2 mt-4">
                 {categoryTotals.map((item) => (
                     <div
                         key={item.category}
-                        className="flex justify-between items-center px-6 py-2"
+                        className="flex justify-between items-center px-6 py-2 border-gray-600 border rounded-lg"
                     >
                         <div className="flex items-center gap-4">
                             <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-3xl">
