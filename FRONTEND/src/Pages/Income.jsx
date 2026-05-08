@@ -23,7 +23,6 @@ const Income = () => {
     const [openModel, setOpenModel] = useState(false);
     const [income, setIncome] = useState([]);
 
-
     const each_sum = income.reduce((prev, curr) => {
         if (!prev[curr.category]) {
             prev[curr.category] = 0;
@@ -41,8 +40,6 @@ const Income = () => {
         }),
     );
 
-    
-
     const fetchIncome = useCallback(async () => {
         const token = localStorage.getItem("token");
 
@@ -59,7 +56,7 @@ const Income = () => {
         } catch (error) {
             console.error(error);
         }
-    },[]);
+    }, []);
 
     useEffect(() => {
         fetchIncome();
@@ -71,7 +68,8 @@ const Income = () => {
 
             <div className="ml-64 pt-14 bg-gray-100 min-h-[100vh] pb-4 relative">
                 {openModel && (
-                    <IncomeModel closeModal={() => setOpenModel(false)} 
+                    <IncomeModel
+                        closeModal={() => setOpenModel(false)}
                         refreshIncomes={fetchIncome}
                     />
                 )}
@@ -163,40 +161,47 @@ const Income = () => {
 
                         <div className="grid grid-cols-2 gap-2 mt-4 ">
                             {income && income.length > 0 ? (
-                                income.map((income, idx) => (
-                                    <div
-                                        key={income._id}
-                                        className="flex justify-between items-center gap-4 px-6 py-2 "
-                                    >
-                                        <div className="flex items-center gap-4">
-                                            <div className="h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
-                                                {getIncomeEmoji(
-                                                    income.category,
-                                                )}
-                                            </div>
-                                            <div>
-                                                <h1 className="text-xl ">
-                                                    {income.category}
-                                                </h1>
-                                                <h1 className="text-md text-gray-500">
-                                                    {getStartOfDay(
-                                                        income.createdAt,
+                                [...income]
+                                    .sort(
+                                        (a, b) =>
+                                            new Date(b.createdAt) -
+                                            new Date(a.createdAt),
+                                    )
+                                    .slice(0, 12)
+                                    .map((income, idx) => (
+                                        <div
+                                            key={income._id}
+                                            className="flex justify-between items-center gap-4 px-6 py-2 "
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className="h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
+                                                    {getIncomeEmoji(
+                                                        income.category,
                                                     )}
-                                                </h1>
+                                                </div>
+                                                <div>
+                                                    <h1 className="text-xl ">
+                                                        {income.category}
+                                                    </h1>
+                                                    <h1 className="text-md text-gray-500">
+                                                        {getStartOfDay(
+                                                            income.createdAt,
+                                                        )}
+                                                    </h1>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        {income.amount > 0 ? (
-                                            <div className="bg-green-200 text-green-600 rounded font-semibold px-4">
-                                                ${income.amount}
-                                            </div>
-                                        ) : (
-                                            <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
-                                                ${income.amount}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))
+                                            {income.amount > 0 ? (
+                                                <div className="bg-green-200 text-green-600 rounded font-semibold px-4">
+                                                    ${income.amount}
+                                                </div>
+                                            ) : (
+                                                <div className="bg-red-200 text-red-600 rounded font-semibold px-4">
+                                                    ${income.amount}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))
                             ) : (
                                 <h1 className="text-2xl font-semibold absolute left-1/2 -translate-x-1/2 ">
                                     Enter Something

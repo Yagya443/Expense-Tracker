@@ -18,7 +18,6 @@ const DashBoardRecent = () => {
                 },
             );
             setRecentTran(res.data);
-            console.log(res.data);
             res.status(200).json(recentTransaction);
         } catch (error) {
             return;

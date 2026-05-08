@@ -140,7 +140,7 @@ app.get("/expense", authMiddleware, async (req, res) => {
 
 app.get("/recent-transaction", authMiddleware, async (req, res) => {
     try {
-        const income = await Expense.find({ userId: req.user.id });
+        const income = await Income.find({ userId: req.user.id });
         const expense = await Expense.find({ userId: req.user.id });
 
         recentTransaction=[...income,...expense]

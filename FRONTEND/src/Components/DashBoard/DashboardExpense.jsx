@@ -43,7 +43,7 @@ const DashboardExpense = () => {
 
     useEffect(() => {
         fetchExpense();
-    }, [categoryTotals]);
+    }, [fetchExpense]);
 
     return (
         <div>

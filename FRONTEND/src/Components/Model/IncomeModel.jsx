@@ -25,7 +25,6 @@ const IncomeModel = ({ closeModal,refreshIncomes }) => {
                 }
             });
 
-            console.log("Added Successfully");
         } catch (error) {
             if (error.response?.status === 401) {
                 console.error("Session expired ");
