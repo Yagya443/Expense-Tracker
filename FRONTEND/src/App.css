@@ -31,3 +31,54 @@
         scrollbar-width: none;
     }
 }
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    /* navbar */
+    .sidebar-container {
+        width: 200px;
+    }
+
+    /* dashboard */
+
+    .dashboard-container,
+    .income-page-container,
+    .expense-page-container {
+        margin-left: 200px;
+    }
+    .dashboard-card {
+        gap: 4px;
+        padding-left: 4px;
+        height: 80px;
+    }
+    .dashboard-card-icon {
+        height: 40px;
+        width: 40px;
+        padding: 6px;
+    }
+
+    .dashboard-card-title {
+        font-size: 16px;
+        text-wrap: nowrap;
+    }
+    .dashboard-card-amount {
+        font-size: 14px;
+    }
+
+    .dashboard-content-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    /* Recent Transaction */
+    .recent-transaction-grid {
+        grid-template-columns: repeat(1, 1fr);
+        max-height: 300px;
+        overflow-y: scroll;
+        scrollbar-width: none;
+    }
+
+    .income-grid,.expense-grid{
+        grid-template-columns: repeat(1,1fr);
+    }
+}
+
+

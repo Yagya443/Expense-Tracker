@@ -36,37 +36,39 @@ const Navbar = () => {
 
     return (
         <>
-            <div className="bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer fixed w-full z-50">
+            <div className="navbar-header bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer fixed w-full z-50">
                 Expense Tracker
             </div>
-            <div className="fixed h-screen w-64 border-r px-2 pt-20">
-                {loginInfo && (
-                    <div>
-                        <div className="h-20 w-20 rounded-full left-1/2 relative -translate-x-1/2 flex items-center justify-center border-2 text-[55px] font-mono">
-                            {loginImage('Yagna Vyas')}
-                        </div>
-                        {/* <img
-                            className="h-20 w-20 rounded-full left-1/2 relative -translate-x-1/2"
-                            src="https://plus.unsplash.com/premium_photo-1777023616744-05bb1f9e7620?q=80&w=687&auto=format&fit=crop"
-                        /> */}
 
-                        <h2 className="text-center text-2xl mt-6 font-semibold capitalize">
+            <div className="sidebar-container fixed h-screen w-64 border-r px-2 pt-20">
+                {loginInfo && (
+                    <div className="sidebar-profile-section">
+                        <div className="sidebar-profile-image h-20 w-20 rounded-full left-1/2 relative -translate-x-1/2 flex items-center justify-center border-2 text-[55px] font-mono">
+                            {loginImage("Yagna Vyas")}
+                        </div>
+
+                        <h2 className="sidebar-profile-name text-center text-2xl mt-6 font-semibold capitalize">
                             {loginInfo.name}
                         </h2>
                     </div>
                 )}
 
-                <div className="flex flex-col gap-4 mt-8">
+                <div className="sidebar-links flex flex-col gap-4 mt-8">
                     <NavLink
                         to="/dashboard"
                         className={({ isActive }) =>
                             `
-                        flex items-center gap-4 text-xl rounded-md py-1 px-2 
-                        
-                        ${isActive ? "bg-violet-600 text-white " : "hover:bg-gray-200"}`
+                        sidebar-link dashboard-link
+                        flex items-center gap-4 text-xl rounded-md py-1 px-2
+                        ${
+                            isActive
+                                ? "sidebar-link-active bg-violet-600 text-white"
+                                : "sidebar-link-hover hover:bg-gray-200"
+                        }
+                        `
                         }
                     >
-                        <MdOutlineDashboard />
+                        <MdOutlineDashboard className="sidebar-link-icon" />
                         Dashboard
                     </NavLink>
 
@@ -74,34 +76,47 @@ const Navbar = () => {
                         to="/income"
                         className={({ isActive }) =>
                             `
-                    flex items-center gap-4 text-xl rounded-md py-1 px-2
-                    
-                                                ${isActive ? "bg-violet-600 text-white " : "hover:bg-gray-200"}`
+                        sidebar-link income-link
+                        flex items-center gap-4 text-xl rounded-md py-1 px-2
+                        ${
+                            isActive
+                                ? "sidebar-link-active bg-violet-600 text-white"
+                                : "sidebar-link-hover hover:bg-gray-200"
+                        }
+                        `
                         }
                     >
-                        <IoWalletOutline />
+                        <IoWalletOutline className="sidebar-link-icon" />
                         Income
                     </NavLink>
+
                     <NavLink
                         to="/expense"
                         className={({ isActive }) =>
                             `
-                    flex items-center gap-4 text-xl rounded-md py-1 px-2
-                        ${isActive ? "bg-violet-600 text-white " : "hover:bg-gray-200"}`
+                        sidebar-link expense-link
+                        flex items-center gap-4 text-xl rounded-md py-1 px-2
+                        ${
+                            isActive
+                                ? "sidebar-link-active bg-violet-600 text-white"
+                                : "sidebar-link-hover hover:bg-gray-200"
+                        }
+                        `
                         }
                     >
-                        <GiReceiveMoney />
+                        <GiReceiveMoney className="sidebar-link-icon" />
                         Expense
                     </NavLink>
 
                     <NavLink
                         to="/"
-                        className={`
+                        className="
+                        sidebar-link logout-link
                         flex items-center gap-4 text-xl rounded-md py-1 px-2
                         hover:bg-red-500
-                        `}
+                    "
                     >
-                        <CiLogout />
+                        <CiLogout className="sidebar-link-icon" />
                         Logout
                     </NavLink>
                 </div>
