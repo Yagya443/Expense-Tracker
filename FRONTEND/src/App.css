@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.recent-transaction-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media screen and (max-width: 1440px) {
+    .recent-transaction-card {
+        padding-left: 2px;
+    }
+
+    .recent-transaction-left {
+        gap: 6px;
+    }
+
+    .recent-transaction-icon {
+        height: 40px;
+        width: 40px;
+        font-size: 30px;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1440px) {
+    .recent-transaction-grid {
+        grid-template-columns: repeat(1, 1fr);
+        max-height: 400px;
+        overflow-y: scroll;
+        scrollbar-width: none;
+    }
+}

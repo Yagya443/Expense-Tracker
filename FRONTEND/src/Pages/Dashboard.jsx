@@ -73,7 +73,9 @@ const Dashboard = () => {
                             <p className="text-xl text-gray-700">
                                 Total Balance
                             </p>
-                            <h2 className="text-2xl font-semibold">${totalIncome+totalExpense}</h2>
+                            <h2 className="text-2xl font-semibold">
+                                ${totalIncome + totalExpense}
+                            </h2>
                         </div>
                     </div>
 
@@ -99,7 +101,9 @@ const Dashboard = () => {
                             <p className="text-xl text-gray-700">
                                 Total Expense
                             </p>
-                            <h2 className="text-2xl font-semibold">${Math.abs(totalExpense)}</h2>
+                            <h2 className="text-2xl font-semibold">
+                                ${Math.abs(totalExpense)}
+                            </h2>
                         </div>
                     </div>
                 </div>

@@ -16,11 +16,7 @@ const FinancialPieChart = () => {
     const [totalIncome, setTotalIncome] = useState(0);
     const [totalExpense, setTotalExpense] = useState(0);
 
-    const COLORS = [
-      "#ef4444",
-      "#facc15", 
-      "#8b5cf6 ",
-      ];
+    const COLORS = ["#ef4444", "#facc15", "#8b5cf6 "];
 
     const fetchTotalIncome = useCallback(async () => {
         const token = localStorage.getItem("token");
@@ -65,18 +61,18 @@ const FinancialPieChart = () => {
     }, []);
 
     const chartData = [
-      {
-        name: "Expense",
-        value: Math.abs(totalExpense),
-      },
-      {
-        name: "Income",
-        value: totalIncome,
-      },
-      {
-          name: "Total",
-          value: Math.abs(totalExpense) + totalIncome,
-      },
+        {
+            name: "Expense",
+            value: Math.abs(totalExpense),
+        },
+        {
+            name: "Income",
+            value: totalIncome,
+        },
+        {
+            name: "Total",
+            value: Math.abs(totalExpense) + totalIncome,
+        },
     ];
 
     return (
@@ -87,16 +83,12 @@ const FinancialPieChart = () => {
                 <PieChart>
                     <Pie
                         data={chartData}
-                        innerRadius={130}
-                        outerRadius={170}
+                        innerRadius="55%"
+                        outerRadius="75%"
                         dataKey="value"
-                       
                     >
                         {chartData.map((entry, index) => (
-                            <Cell
-                                key={index}
-                                fill={COLORS[index]}
-                            />
+                            <Cell key={index} fill={COLORS[index]} />
                         ))}
                     </Pie>
 
