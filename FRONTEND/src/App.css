@@ -76,9 +76,91 @@
         scrollbar-width: none;
     }
 
-    .income-grid,.expense-grid{
-        grid-template-columns: repeat(1,1fr);
+    .income-grid,
+    .expense-grid {
+        grid-template-columns: repeat(1, 1fr);
     }
 }
 
+@media screen and (min-width: 425px) and (max-width: 768px) {
+    /* navbar */
+    .sidebar-container {
+        width: 0px;
+        display: none;
+    }
 
+    /* dashboard */
+
+    .dashboard-summary-grid {
+        padding-top: 0px;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 10px;
+    }
+
+    .dashboard-container,
+    .income-page-container,
+    .expense-page-container {
+        margin-left: 0px;
+    }
+    .dashboard-card {
+        gap: 4px;
+        padding-left: 10px;
+        height: 80px;
+    }
+    .dashboard-card-icon {
+        height: 50px;
+        width: 50px;
+        padding: 10px;
+    }
+
+    .dashboard-card-title {
+        font-size: 22px;
+        text-wrap: nowrap;
+    }
+    .dashboard-card-amount {
+        font-size: 16px;
+    }
+
+    .dashboard-content-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    /* Recent Transaction */
+    .recent-transaction-grid {
+        grid-template-columns: repeat(1, 1fr);
+        max-height: 300px;
+        overflow-y: scroll;
+        scrollbar-width: none;
+    }
+
+    .income-grid,
+    .expense-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    /* Incomepage*/
+
+    .income-overview-subtitle,
+    .expense-overview-subtitle {
+        font-size: 12px;
+    }
+    .income-controls,
+    .expense-controls {
+        flex-direction: column-reverse;
+        gap: 6px;
+    }
+    .income-grid,
+    .expense-grid {
+        margin-top: 40px;
+    }
+
+    .income-card,
+    .expense-card {
+        padding: 8px 12px;
+
+    }
+    .income-card-left,
+    .expense-card-left {
+        gap: 12px;
+    }
+}

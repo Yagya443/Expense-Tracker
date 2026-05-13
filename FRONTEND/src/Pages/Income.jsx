@@ -79,7 +79,7 @@ const Income = () => {
                     <div className="income-overview-card bg-white w-full h-[500px] shadow-md rounded-md">
                         <div className="income-overview-header flex justify-between p-4">
                             <div className="income-overview-title-section">
-                                <h2 className="income-overview-title text-xl">
+                                <h2 className="income-overview-title text-xl font-semibold">
                                     Income Overview
                                 </h2>
 
@@ -102,7 +102,7 @@ const Income = () => {
                             <ResponsiveContainer width="100%" height={400}>
                                 <BarChart data={convertChartData}>
                                     <CartesianGrid
-                                        strokeDasharray="6 6"
+                                        strokeDasharray="4 4"
                                         className="income-chart-grid"
                                     />
 
