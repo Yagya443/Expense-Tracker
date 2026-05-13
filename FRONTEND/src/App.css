@@ -82,11 +82,11 @@
     }
 }
 
-@media screen and (min-width: 425px) and (max-width: 768px) {
+@media screen and (max-width: 768px) {
     /* navbar */
     .sidebar-container {
-        width: 0px;
-        display: none;
+        width: 250px;
+        /* display: none; */
     }
 
     /* dashboard */

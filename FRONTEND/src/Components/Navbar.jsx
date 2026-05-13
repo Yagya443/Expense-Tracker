@@ -4,11 +4,13 @@ import { IoWalletOutline } from "react-icons/io5";
 import { GiReceiveMoney } from "react-icons/gi";
 import { CiLogout } from "react-icons/ci";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { loginImage } from "./utils";
 
 const Navbar = () => {
     const [loginInfo, setLoginInfo] = useState(null);
+    const [displayNavbarIcon, setDisplayNavbarIcon] = useState(false);
+    const [openSlidebar, setOpenSlidebar] = useState(false);
 
     const fetchLogin = async () => {
         const token = localStorage.getItem("token");
@@ -34,13 +36,52 @@ const Navbar = () => {
         }
     }, []);
 
+    useLayoutEffect(() => {
+        if (window.innerWidth < 426) {
+            setDisplayNavbarIcon(true);
+        } else {
+            setDisplayNavbarIcon(false);
+        }
+    }, []);
+
+    function navbar3Lines() {
+        setOpenSlidebar(!openSlidebar);
+    }
+
     return (
         <>
-            <div className="navbar-header bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer fixed w-full z-50">
+            <div className="navbar-header bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer fixed w-full z-90">
                 Expense Tracker
             </div>
 
-            <div className="sidebar-container fixed h-screen w-64 border-r px-2 pt-20">
+            <div
+                className={`
+                    sidebar-container top-0 fixed h-screen w-64 border-r px-2 pt-20 bg-white z-50 transition-all duration-300
+                    ${
+                        displayNavbarIcon
+                            ? openSlidebar
+                                ? "right-0"
+                                : "-right-64"
+                            : "left-0"
+                    }
+                `}
+            >
+                {displayNavbarIcon && (
+                    <div
+                        className="navbar-icon fixed z-70 top-4 right-2 flex gap-1 flex-col "
+                        onClick={navbar3Lines}
+                    >
+                        <div
+                            className={`navbar-icon-1 h-1 w-10 duration-150 transition-all bg-black  ${!openSlidebar && "-rotate-45 translate-y-1"}`}
+                        ></div>
+                        <div
+                            className={`navbar-icon-2 h-1 w-10 duration-150 transition-all bg-black ${!openSlidebar && "hidden "}`}
+                        ></div>
+                        <div
+                            className={`navbar-icon-1 h-1 w-10 duration-150 transition-all bg-black ${!openSlidebar && "rotate-45 -translate-y-1"}`}
+                        ></div>
+                    </div>
+                )}
                 {loginInfo && (
                     <div className="sidebar-profile-section">
                         <div className="sidebar-profile-image h-20 w-20 rounded-full left-1/2 relative -translate-x-1/2 flex items-center justify-center border-2 text-[55px] font-mono">
