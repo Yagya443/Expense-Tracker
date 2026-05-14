@@ -64,9 +64,9 @@ const Dashboard = () => {
             <Navbar />
 
             <div className="dashboard-container ml-64 pt-20 bg-gray-100 min-h-[100vh] pb-4">
-                {/* Top Cards */}
+                
                 <div className="dashboard-summary-grid grid grid-cols-3 px-8 gap-4">
-                    {/* Total Balance */}
+                    
                     <div className="dashboard-card total-balance-card bg-white rounded-xl h-24 flex gap-4 items-center pl-4 shadow-lg">
                         <div className="dashboard-card-icon total-balance-icon bg-violet-500 h-16 flex items-center justify-center w-16 rounded-full">
                             <IoMdCard size={40} />
@@ -83,7 +83,6 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Total Income */}
                     <div className="dashboard-card total-income-card bg-white rounded-xl h-24 flex gap-4 items-center pl-4 shadow-lg">
                         <div className="dashboard-card-icon total-income-icon bg-yellow-400 h-16 flex items-center justify-center w-16 rounded-full">
                             <CiWallet size={40} />
@@ -100,7 +99,6 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Total Expense */}
                     <div className="dashboard-card total-expense-card bg-white rounded-xl h-24 flex gap-4 items-center pl-4 shadow-lg">
                         <div className="dashboard-card-icon total-expense-icon bg-red-500 h-16 flex items-center justify-center w-16 rounded-full">
                             <GiReceiveMoney size={40} />
@@ -118,35 +116,28 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* Dashboard Content */}
-                <div className="dashboard-content-grid px-8 mt-8 grid grid-cols-2 gap-8">
-                    {/* Recent Transactions */}
+                <div className="dashboard-content-grid px-8 mt-8 grid grid-cols-2 gap-8 z-50">
                     <div className="dashboard-widget recent-transaction-widget bg-white min-h-[300px] rounded-md relative py-4 px-4 shadow-md">
                         <DashBoardRecent />
                     </div>
 
-                    {/* Pie Chart */}
                     <div className="dashboard-widget piechart-widget bg-white min-h-[500px] rounded-md shadow-md">
                         <PieChart />
                     </div>
 
-                    {/* Bar Graph */}
-                    <div className="dashboard-widget bargraph-widget bg-white min-h-[400px] rounded-md relative py-4 px-4 shadow-md">
+                    <div className="dashboard-widget bargraph-widget bg-white min-h-[400px] rounded-md relative py-4 px-2 shadow-md">
                         <Bargraph />
                     </div>
 
-                    {/* Expense Dashboard */}
                     <div className="dashboard-widget expense-widget bg-white min-h-[400px] rounded-md relative py-4 px-4 shadow-md">
                         <DashboardExpense />
                     </div>
 
-                    {/* Income Dashboard */}
                     <div className="dashboard-widget income-widget bg-white min-h-[400px] rounded-md relative py-4 px-4 shadow-md">
                         <DashboardIncome />
                     </div>
 
-                    {/* Income Graph */}
-                    <div className="dashboard-widget income-graph-widget bg-white min-h-[400px] rounded-md relative py-4 px-4 shadow-md">
+                    <div className="dashboard-widget income-graph-widget bg-white min-h-[400px] rounded-md relative py-4 px-2 shadow-md">
                         <IncomeGraph />
                     </div>
                 </div>

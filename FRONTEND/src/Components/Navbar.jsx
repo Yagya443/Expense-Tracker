@@ -50,7 +50,7 @@ const Navbar = () => {
 
     return (
         <>
-            <div className="navbar-header bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer fixed w-full z-90">
+            <div className="navbar-header bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer fixed w-full z-50">
                 Expense Tracker
             </div>
 
@@ -59,7 +59,7 @@ const Navbar = () => {
                     sidebar-container top-0 fixed h-screen w-64 border-r px-2 pt-20 bg-white z-50 transition-all duration-300
                     ${
                         displayNavbarIcon
-                            ? openSlidebar
+                            ? !openSlidebar
                                 ? "right-0"
                                 : "-right-64"
                             : "left-0"
@@ -85,7 +85,7 @@ const Navbar = () => {
                 {loginInfo && (
                     <div className="sidebar-profile-section">
                         <div className="sidebar-profile-image h-20 w-20 rounded-full left-1/2 relative -translate-x-1/2 flex items-center justify-center border-2 text-[55px] font-mono">
-                            {loginImage("Yagna Vyas")}
+                            {loginImage(loginInfo.name)}
                         </div>
 
                         <h2 className="sidebar-profile-name text-center text-2xl mt-6 font-semibold capitalize">

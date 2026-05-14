@@ -60,7 +60,7 @@ const Income = () => {
 
     useEffect(() => {
         fetchIncome();
-    }, [fetchIncome]);
+    }, []);
 
     return (
         <div>
