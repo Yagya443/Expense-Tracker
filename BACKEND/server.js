@@ -33,7 +33,7 @@ app.post("/", async (req, res) => {
                 .json({ message: "Invalid email or password" });
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-            expiresIn: "30d",
+            expiresIn: "1d",
         });
 
         res.json({
@@ -53,7 +53,7 @@ app.post("/signup", async (req, res) => {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User already exists" });
-        }        
+        }
 
         const user = new User({
             name,
@@ -67,7 +67,7 @@ app.post("/signup", async (req, res) => {
             message: "Account created successfully",
         });
     } catch (error) {
-        return res.status(200).json({message:error.message})
+        return res.status(200).json({ message: error.message });
     }
 });
 
@@ -101,15 +101,15 @@ app.get("/user", authMiddleware, async (req, res) => {
 //Add expense
 app.post("/expense", authMiddleware, async (req, res) => {
     try {
-        const {amount, category, date } = req.body;
+        const { amount, category, date } = req.body;
 
-        if ( !amount || !category) {
+        if (!amount || !category) {
             return res.status(400).json({ message: "All fields required" });
         }
 
         const expense = new Expense({
             userId: req.user.id,
-            
+
             amount,
             category,
             date: date || Date.now(),
@@ -143,8 +143,7 @@ app.get("/recent-transaction", authMiddleware, async (req, res) => {
         const income = await Income.find({ userId: req.user.id });
         const expense = await Expense.find({ userId: req.user.id });
 
-        recentTransaction=[...income,...expense]
-
+        recentTransaction = [...income, ...expense];
 
         res.status(200).json(recentTransaction);
     } catch (error) {
@@ -163,7 +162,7 @@ app.post("/income", authMiddleware, async (req, res) => {
 
         const income = new Income({
             userId: req.user.id,
-            
+
             amount,
             category,
             date: date || Date.now(),

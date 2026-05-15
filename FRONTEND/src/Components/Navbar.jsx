@@ -56,7 +56,7 @@ const Navbar = () => {
 
             <div
                 className={`
-                    sidebar-container top-0 fixed h-screen w-64 border-r px-2 pt-20 bg-white z-50 transition-all duration-300
+                    sidebar-container top-0 fixed h-screen w-64 border-r px-2 pt-20 bg-white z-40 transition-all duration-300
                     ${
                         displayNavbarIcon
                             ? !openSlidebar
