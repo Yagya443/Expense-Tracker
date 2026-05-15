@@ -13,7 +13,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: "https://expense-tracker-yagna-vyas.vercel.app/",
+        origin: "https://expense-tracker-yagna-vyas.vercel.app",
         credentials: true,
     }),
 );
