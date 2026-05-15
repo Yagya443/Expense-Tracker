@@ -15,7 +15,7 @@ const IncomeModel = ({ closeModal,refreshIncomes }) => {
         const token = localStorage.getItem("token");
 
         try {
-            await axios.post("http://localhost:5000/income", {
+            await axios.post(`${import.meta.env.VITE_API_URL}/income`, {
                 amount,
                 category,
                 date,

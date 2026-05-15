@@ -11,7 +11,11 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+
+app.use(cors({
+    origin: "https://expense-tracker-git-main-yagna-vyas.vercel.app",
+    credentials: true
+}));
 
 const connectDB = async () => {
     const conn = await mongoose.connect(process.env.CONNECTION_STRING);

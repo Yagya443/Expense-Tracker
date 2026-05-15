@@ -16,7 +16,7 @@ const ExpenseModel = ({ closeModal,refreshExpenses }) => {
 
         try {
             await axios.post(
-                "http://localhost:5000/expense",
+                `${import.meta.env.VITE_API_URL}/expense`,
                 {
                     amount: finalAmount,
                     category,
