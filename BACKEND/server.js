@@ -13,18 +13,18 @@ const app = express();
 
 app.use(
     cors({
-        origin: "https://expense-tracker-yagna-vyas.vercel.app",
+        origin: "https://expense-tracker-gamma-woad-81.vercel.app",
+        // origin: "https://expense-tracker-yagna-vyas.vercel.app",
         credentials: true,
     }),
 );
+
 
 const connectDB = async () => {
     const conn = await mongoose.connect(process.env.CONNECTION_STRING);
     console.log(`MongoDB Connected`);
 };
 connectDB();
-
-app.use(express.json());
 
 // Login
 app.post("/", async (req, res) => {
@@ -56,8 +56,11 @@ app.post("/signup", async (req, res) => {
         const { name, email, password } = req.body;
 
         const existingUser = await User.findOne({ email });
+
         if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
+            return res.status(400).json({
+                message: "User already exists",
+            });
         }
 
         const user = new User({
@@ -68,11 +71,18 @@ app.post("/signup", async (req, res) => {
 
         await user.save();
 
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: "1d",
+        });
+
         res.status(201).json({
             message: "Account created successfully",
+            token,
         });
     } catch (error) {
-        return res.status(200).json({ message: error.message });
+        res.status(500).json({
+            message: error.message,
+        });
     }
 });
 

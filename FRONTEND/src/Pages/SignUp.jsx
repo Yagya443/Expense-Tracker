@@ -9,7 +9,7 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const navigate=useNavigate()
+    const navigate = useNavigate();
 
     const imgRef = useRef();
 
@@ -27,7 +27,10 @@ const Login = () => {
                     password,
                 },
             );
-            navigate('/dashboard')
+
+            localStorage.setItem("token", res.data.token);
+
+            navigate("/dashboard");
         } catch (error) {
             console.log(error.response?.data || error.message);
         }

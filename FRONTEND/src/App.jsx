@@ -7,18 +7,38 @@ import SignUp from "./Pages/SignUp";
 import Dashboard from "./Pages/Dashboard";
 import Income from "./Pages/Income";
 import Expense from "./Pages/Expense";
-
-
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
     return (
         <div className="">
             <Routes>
-                <Route path='/' element={<Login />}/>
-                <Route path='/signup' element={<SignUp />}/>
-                <Route path='/dashboard' element={<Dashboard />}/>
-                <Route path='/income' element={<Income />}/>
-                <Route path='/expense' element={<Expense />}/>
+                <Route path="/" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/income"
+                    element={
+                        <ProtectedRoute>
+                            <Income />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/expense"
+                    element={
+                        <ProtectedRoute>
+                            <Expense />
+                        </ProtectedRoute>
+                    }
+                />
             </Routes>
         </div>
     );
