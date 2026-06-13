@@ -44,13 +44,17 @@ const Navbar = () => {
         }
     }, []);
 
+    const handleLogOut = () => {
+        localStorage.removeItem('token')
+    };
+
     function navbar3Lines() {
         setOpenSlidebar(!openSlidebar);
     }
 
     return (
         <>
-            <div className="navbar-header bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer fixed w-full z-50">
+            <div className="navbar-header bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer fixed w-full z-40">
                 Expense Tracker
             </div>
 
@@ -68,17 +72,17 @@ const Navbar = () => {
             >
                 {displayNavbarIcon && (
                     <div
-                        className="navbar-icon fixed z-70 top-4 right-2 flex gap-1 flex-col "
+                        className="navbar-icon fixed z-50 top-4 right-2 flex gap-1 flex-col "
                         onClick={navbar3Lines}
                     >
                         <div
-                            className={`navbar-icon-1 h-1 w-10 duration-150 transition-all bg-black  ${!openSlidebar && "-rotate-45 translate-y-1"}`}
+                            className={`navbar-icon-1 h-1 w-10 z-70 duration-150 transition-all bg-black  ${!openSlidebar && "-rotate-45 translate-y-1"}`}
                         ></div>
                         <div
-                            className={`navbar-icon-2 h-1 w-10 duration-150 transition-all bg-black ${!openSlidebar && "hidden "}`}
+                            className={`navbar-icon-2 h-1 w-10 z-70 duration-150 transition-all bg-black ${!openSlidebar && "hidden "}`}
                         ></div>
                         <div
-                            className={`navbar-icon-1 h-1 w-10 duration-150 transition-all bg-black ${!openSlidebar && "rotate-45 -translate-y-1"}`}
+                            className={`navbar-icon-1 h-1 w-10 z-70 duration-150 transition-all bg-black ${!openSlidebar && "rotate-45 -translate-y-1"}`}
                         ></div>
                     </div>
                 )}
@@ -97,6 +101,7 @@ const Navbar = () => {
                 <div className="sidebar-links flex flex-col gap-4 mt-8">
                     <NavLink
                         to="/dashboard"
+                        onClick={() => setOpenSlidebar(false)}
                         className={({ isActive }) =>
                             `
                         sidebar-link dashboard-link
@@ -115,6 +120,7 @@ const Navbar = () => {
 
                     <NavLink
                         to="/income"
+                        onClick={() => setOpenSlidebar(false)}
                         className={({ isActive }) =>
                             `
                         sidebar-link income-link
@@ -133,6 +139,7 @@ const Navbar = () => {
 
                     <NavLink
                         to="/expense"
+                        onClick={() => setOpenSlidebar(false)}
                         className={({ isActive }) =>
                             `
                         sidebar-link expense-link
@@ -152,6 +159,7 @@ const Navbar = () => {
                     <NavLink
                         to="/"
                         className="
+                        onClick={handleLogOut}
                         sidebar-link logout-link
                         flex items-center gap-4 text-xl rounded-md py-1 px-2
                         hover:bg-red-500

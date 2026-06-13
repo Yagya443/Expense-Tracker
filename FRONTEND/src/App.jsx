@@ -28,7 +28,7 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <Income />
-                        </ProtectedRoute>
+                         </ProtectedRoute> 
                     }
                 />
                 <Route
@@ -36,7 +36,7 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <Expense />
-                        </ProtectedRoute>
+                         </ProtectedRoute>
                     }
                 />
             </Routes>

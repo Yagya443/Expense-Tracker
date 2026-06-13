@@ -40,7 +40,7 @@ const Dashboard = () => {
 
         try {
             const res = await axios.get(
-                `${import.meta.env.VITE_API_URL}/totalExpense`,
+                `${import.meta.env.VITE_API_URL}/totalExpense `,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

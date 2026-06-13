@@ -14,12 +14,11 @@ const app = express();
 app.use(express.json());
 app.use(
     cors({
-        origin: "https://expense-tracker-gamma-woad-81.vercel.app",
+        // origin: "https://expense-tracker-gamma-woad-81.vercel.app",
         // origin: "https://expense-tracker-yagna-vyas.vercel.app",
-        credentials: true,
+        // credentials: true,
     }),
 );
-
 
 const connectDB = async () => {
     const conn = await mongoose.connect(process.env.CONNECTION_STRING);

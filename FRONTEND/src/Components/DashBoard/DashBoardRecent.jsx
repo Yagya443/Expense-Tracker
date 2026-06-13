@@ -35,7 +35,7 @@ const DashBoardRecent = () => {
                 Recent Transactions
             </h2>
 
-            <div className="recent-transaction-grid gap-4 mt-6 ">
+            <div className="recent-transaction-grid gap-2 mt-6 ">
                 {recentTran && recentTran.length > 0 ? (
                     recentTran.slice(0, 10).map((recentTran, idx) => (
                         <div
