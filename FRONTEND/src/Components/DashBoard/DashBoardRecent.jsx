@@ -39,11 +39,11 @@ const DashBoardRecent = () => {
                 {recentTran && recentTran.length > 0 ? (
                     recentTran.slice(0, 10).map((recentTran, idx) => (
                         <div
-                            className="recent-transaction-card flex justify-between items-center gap-4 px-6 py-2 border-gray-600 border rounded-lg"
                             key={recentTran._id}
+                            className="recent-transaction-card flex justify-between items-center overflow-hidden px-6 py-2 border-gray-600 border rounded-lg"
                         >
                             <div className="recent-transaction-left flex items-center justify-center gap-4">
-                                <div className="recent-transaction-icon h-12 rounded-full w-12 border text-4xl bg-gray-200 flex items-center justify-center">
+                                <div className="recent-transaction-icon h-10 text-center rounded-full w-10 border text-2xl bg-gray-200 flex items-center justify-center">
                                     {recentTran.amount > 0
                                         ? getIncomeEmoji(recentTran.category)
                                         : getExpenseEmoji(recentTran.category)}

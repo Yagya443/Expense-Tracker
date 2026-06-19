@@ -36,53 +36,61 @@ const Navbar = () => {
         }
     }, []);
 
-    useLayoutEffect(() => {
-        if (window.innerWidth < 426) {
-            setDisplayNavbarIcon(true);
-        } else {
-            setDisplayNavbarIcon(false);
-        }
+    useEffect(() => {
+        const handleResize = () => {
+            setDisplayNavbarIcon(window.innerWidth < 500);
+        };
+
+        handleResize();
+
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
     }, []);
 
     const handleLogOut = () => {
-        localStorage.removeItem('token')
+        localStorage.removeItem("token");
     };
 
     function navbar3Lines() {
         setOpenSlidebar(!openSlidebar);
     }
 
+    // console.log("displayNavbarIcon", displayNavbarIcon);
+
     return (
         <>
-            <div className="navbar-header bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer fixed w-full z-40">
+            <div className="navbar-header bg-white border-b text-2xl py-2 px-4 font-bold cursor-pointer fixed w-full z-10">
                 Expense Tracker
             </div>
 
             <div
                 className={`
-                    sidebar-container top-0 fixed h-screen w-64 border-r px-2 pt-20 bg-white z-40 transition-all duration-300
+                    sidebar-container top-0 fixed h-screen w-64 bg-white border-r px-2 pt-20 transition-all duration-300
                     ${
                         displayNavbarIcon
                             ? !openSlidebar
-                                ? "right-0"
-                                : "-right-64"
+                                ? "right-0 z-20 "
+                                : "-right-64 z-20"
                             : "left-0"
                     }
                 `}
             >
                 {displayNavbarIcon && (
                     <div
-                        className="navbar-icon fixed z-50 top-4 right-2 flex gap-1 flex-col "
+                        className="navbar-icon fixed top-4 right-2 flex gap-1  flex-col z-20 "
                         onClick={navbar3Lines}
                     >
                         <div
-                            className={`navbar-icon-1 h-1 w-10 z-70 duration-150 transition-all bg-black  ${!openSlidebar && "-rotate-45 translate-y-1"}`}
+                            className={`navbar-icon-1 h-1 w-10 duration-150 z-20 transition-all bg-black  ${!openSlidebar && "-rotate-45 translate-y-1"}`}
                         ></div>
                         <div
-                            className={`navbar-icon-2 h-1 w-10 z-70 duration-150 transition-all bg-black ${!openSlidebar && "hidden "}`}
+                            className={`navbar-icon-2 h-1 w-10 duration-150 z-20 transition-all bg-black ${!openSlidebar && "hidden "}`}
                         ></div>
                         <div
-                            className={`navbar-icon-1 h-1 w-10 z-70 duration-150 transition-all bg-black ${!openSlidebar && "rotate-45 -translate-y-1"}`}
+                            className={`navbar-icon-1 h-1 w-10 duration-150 z-20 transition-all bg-black ${!openSlidebar && "rotate-45 -translate-y-1"}`}
                         ></div>
                     </div>
                 )}
