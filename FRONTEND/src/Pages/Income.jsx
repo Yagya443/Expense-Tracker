@@ -22,14 +22,14 @@ import {
 const Income = () => {
     const [openModel, setOpenModel] = useState(false);
     const [income, setIncome] = useState([]);
+    const [newIncome, setNewIncome] = useState([]);
+    const [toggleSelect, setToggleSelect] = useState("default");
 
     const each_sum = income.reduce((prev, curr) => {
         if (!prev[curr.category]) {
             prev[curr.category] = 0;
         }
-
         prev[curr.category] += curr.amount;
-
         return prev;
     }, {});
 
@@ -42,7 +42,6 @@ const Income = () => {
 
     const fetchIncome = useCallback(async () => {
         const token = localStorage.getItem("token");
-
         try {
             const res = await axios.get(
                 `${import.meta.env.VITE_API_URL}/income`,
@@ -52,15 +51,64 @@ const Income = () => {
                     },
                 },
             );
-            setIncome(res.data);
+            setIncome([...res.data]);
+            setNewIncome([...res.data]);
         } catch (error) {
             console.error(error);
         }
     }, []);
 
+    // console.log(newIncome);
+
+    const handleSorting = () => {
+        const sortedIncome = [...newIncome];
+
+        switch (toggleSelect) {
+            case "a-z":
+                sortedIncome.sort((a, b) => {
+                    return a.category.localeCompare(b.category);
+                });
+                break;
+            case "z-a":
+                sortedIncome.sort((a, b) => {
+                    return b.category.localeCompare(a.category);
+                });
+
+                break;
+            case "price":
+                sortedIncome.sort((a, b) => {
+                    return a.amount - b.amount;
+                });
+
+                break;
+            case "pricedesc":
+                sortedIncome.sort((a, b) => {
+                    return b.amount - a.amount;
+                });
+
+                break;
+            default:
+                console.log('hello');
+                
+                sortedIncome.sort((a, b) => {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+                break;
+        }
+        setNewIncome(sortedIncome);
+    };
+
     useEffect(() => {
         fetchIncome();
+        handleSorting();
     }, []);
+
+    useEffect(() => {
+        handleSorting();
+    }, [toggleSelect]);
+
+    // console.log(newIncome);
+    // console.log(income);
 
     return (
         <div>
@@ -155,8 +203,13 @@ const Income = () => {
 
                         {/* Controls */}
                         <div className="income-controls absolute font-semibold right-4 top-4 flex gap-4">
-                            <select className="income-sort-select border-black border rounded">
-                                <option value="">Sort By</option>
+                            <select
+                                className="income-sort-select border-black border rounded"
+                                onChange={(e) => {                                    
+                                    setToggleSelect(e.target.value);
+                                }}
+                            >
+                                <option value="default">Sort By</option>
                                 <option value="a-z">A-Z</option>
                                 <option value="z-a">Z-A</option>
                                 <option value="price">Price Low → High</option>
@@ -176,50 +229,43 @@ const Income = () => {
 
                         {/* Income Grid */}
                         <div className="income-grid grid grid-cols-2 gap-2 mt-4">
-                            {income && income.length > 0 ? (
-                                [...income]
-                                    .sort(
-                                        (a, b) =>
-                                            new Date(b.createdAt) -
-                                            new Date(a.createdAt),
-                                    )
-                                    .slice(0, 12)
-                                    .map((income, idx) => (
-                                        <div
-                                            key={income._id}
-                                            className="income-card flex justify-between items-center gap-4 px-6 py-2"
-                                        >
-                                            <div className="income-card-left flex items-center gap-4">
-                                                <div className="income-card-icon h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
-                                                    {getIncomeEmoji(
-                                                        income.category,
-                                                    )}
-                                                </div>
-
-                                                <div className="income-card-info">
-                                                    <h1 className="income-card-category text-xl">
-                                                        {income.category}
-                                                    </h1>
-
-                                                    <h1 className="income-card-date text-md text-gray-500">
-                                                        {getStartOfDay(
-                                                            income.createdAt,
-                                                        )}
-                                                    </h1>
-                                                </div>
+                            {newIncome && newIncome.length > 0 ? (
+                                [...newIncome].reverse().slice(0, 12).map((income, idx) => (
+                                    <div
+                                        key={income._id}
+                                        className="income-card flex justify-between items-center gap-4 px-6 py-2"
+                                    >
+                                        <div className="income-card-left flex items-center gap-4">
+                                            <div className="income-card-icon h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
+                                                {getIncomeEmoji(
+                                                    income.category,
+                                                )}
                                             </div>
 
-                                            {income.amount > 0 ? (
-                                                <div className="income-card-amount income-positive bg-green-200 text-green-600 rounded font-semibold px-4">
-                                                    ${income.amount}
-                                                </div>
-                                            ) : (
-                                                <div className="income-card-amount income-negative bg-red-200 text-red-600 rounded font-semibold px-4">
-                                                    ${income.amount}
-                                                </div>
-                                            )}
+                                            <div className="income-card-info">
+                                                <h1 className="income-card-category text-xl">
+                                                    {income.category}
+                                                </h1>
+
+                                                <h1 className="income-card-date text-md text-gray-500">
+                                                    {getStartOfDay(
+                                                        income.createdAt,
+                                                    )}
+                                                </h1>
+                                            </div>
                                         </div>
-                                    ))
+
+                                        {income.amount > 0 ? (
+                                            <div className="income-card-amount income-positive bg-green-200 text-green-600 rounded font-semibold px-4">
+                                                ${income.amount}
+                                            </div>
+                                        ) : (
+                                            <div className="income-card-amount income-negative bg-red-200 text-red-600 rounded font-semibold px-4">
+                                                ${income.amount}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))
                             ) : (
                                 <h1 className="income-empty-state text-2xl font-semibold absolute left-1/2 -translate-x-1/2">
                                     Enter Something

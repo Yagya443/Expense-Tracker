@@ -19,8 +19,8 @@ const Login = () => {
                 password,
             });
 
-            localStorage.setItem("token", res.data.token);
-
+            localStorage.setItem("token", res.data.token);          
+            
             navigate("/dashboard");
         } catch (error) {
             console.error(error);

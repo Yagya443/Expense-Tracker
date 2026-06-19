@@ -21,6 +21,9 @@ import {
 
 const Expense = () => {
     const [expense, setExpense] = useState([]);
+    const [newExpense, setNewExpense] = useState([]);
+    const [toggleSelect, setToggleSelect] = useState("default");
+
     const [openModel, setOpenModel] = useState(false);
 
     const formattedExpense = expense.map((item) => ({
@@ -50,14 +53,55 @@ const Expense = () => {
             );
 
             setExpense(res.data);
+            setNewExpense(res.data);
         } catch (error) {
             console.error(error);
         }
     }, []);
 
+    const handleSorting = () => {
+        const sortedIncome = [...newExpense];
+
+        switch (toggleSelect) {
+            case "a-z":
+                sortedIncome.sort((a, b) => {
+                    return a.category.localeCompare(b.category);
+                });
+                break;
+            case "z-a":
+                sortedIncome.sort((a, b) => {
+                    return b.category.localeCompare(a.category);
+                });
+
+                break;
+            case "price":
+                sortedIncome.sort((a, b) => {
+                    return b.amount - a.amount;
+                });
+
+                break;
+            case "pricedesc":
+                sortedIncome.sort((a, b) => {
+                    return a.amount - b.amount;
+                });
+
+                break;
+            default:
+                sortedIncome.sort((a, b) => {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+                break;
+        }
+        setNewExpense(sortedIncome);
+    };
+
     useEffect(() => {
         fetchExpense();
-    }, [fetchExpense]);
+    }, []);
+
+    useEffect(() => {
+        handleSorting();
+    }, [toggleSelect]);
 
     const convertChartData = Object.entries(each_sum).map(
         ([category, amount]) => ({
@@ -140,8 +184,13 @@ const Expense = () => {
 
                         {/* Controls */}
                         <div className="expense-controls absolute font-semibold right-4 top-4 flex gap-4">
-                            <select className="expense-sort-select border-black border rounded">
-                                <option value="">Sort By</option>
+                            <select
+                                className="expense-sort-select border-black border rounded"
+                                onChange={(e) =>
+                                    setToggleSelect(e.target.value)
+                                }
+                            >
+                                <option value="default">Sort By</option>
                                 <option value="a-z">A-Z</option>
                                 <option value="z-a">Z-A</option>
                                 <option value="price">Price Low → High</option>
@@ -162,49 +211,42 @@ const Expense = () => {
                         {/* Expense Grid */}
                         <div className="expense-grid grid grid-cols-2 gap-2 mt-2">
                             {expense && expense.length > 0 ? (
-                                [...expense]
-                                    .sort(
-                                        (a, b) =>
-                                            new Date(b.createdAt) -
-                                            new Date(a.createdAt),
-                                    )
-                                    .slice(0, 12)
-                                    .map((expense, idx) => (
-                                        <div
-                                            key={expense._id}
-                                            className="expense-card flex justify-between items-center gap-4 px-6 py-2"
-                                        >
-                                            <div className="expense-card-left flex items-center gap-4">
-                                                <div className="expense-card-icon h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
-                                                    {getExpenseEmoji(
-                                                        expense.category,
-                                                    )}
-                                                </div>
-
-                                                <div className="expense-card-info">
-                                                    <h1 className="expense-card-category text-xl">
-                                                        {expense.category}
-                                                    </h1>
-
-                                                    <h1 className="expense-card-date text-md text-gray-500">
-                                                        {getStartOfDay(
-                                                            expense.createdAt,
-                                                        )}
-                                                    </h1>
-                                                </div>
+                                [...newExpense].reverse().slice(0,12).map((expense, idx) => (
+                                    <div
+                                        key={expense._id}
+                                        className="expense-card flex justify-between items-center gap-4 px-6 py-2"
+                                    >
+                                        <div className="expense-card-left flex items-center gap-4">
+                                            <div className="expense-card-icon h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
+                                                {getExpenseEmoji(
+                                                    expense.category,
+                                                )}
                                             </div>
 
-                                            {expense.amount > 0 ? (
-                                                <div className="expense-card-amount expense-positive bg-green-200 text-green-600 rounded font-semibold px-4">
-                                                    ${expense.amount}
-                                                </div>
-                                            ) : (
-                                                <div className="expense-card-amount expense-negative bg-red-200 text-red-600 rounded font-semibold px-4">
-                                                    ${expense.amount}
-                                                </div>
-                                            )}
+                                            <div className="expense-card-info">
+                                                <h1 className="expense-card-category text-xl">
+                                                    {expense.category}
+                                                </h1>
+
+                                                <h1 className="expense-card-date text-md text-gray-500">
+                                                    {getStartOfDay(
+                                                        expense.createdAt,
+                                                    )}
+                                                </h1>
+                                            </div>
                                         </div>
-                                    ))
+
+                                        {expense.amount > 0 ? (
+                                            <div className="expense-card-amount expense-positive bg-green-200 text-green-600 rounded font-semibold px-4">
+                                                ${expense.amount}
+                                            </div>
+                                        ) : (
+                                            <div className="expense-card-amount expense-negative bg-red-200 text-red-600 rounded font-semibold px-4">
+                                                ${expense.amount}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))
                             ) : (
                                 <h1 className="expense-empty-state text-2xl font-semibold absolute left-1/2 -translate-x-1/2">
                                     Enter Something

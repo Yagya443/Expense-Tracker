@@ -16,7 +16,7 @@ app.use(
     cors({
         // origin: "https://expense-tracker-gamma-woad-81.vercel.app",
         // origin: "https://expense-tracker-yagna-vyas.vercel.app",
-        // credentials: true,
+        credentials: true,
     }),
 );
 
@@ -40,6 +40,9 @@ app.post("/", async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
             expiresIn: "1d",
         });
+
+        console.log(token);
+        
 
         res.json({
             message: "Login successful",
