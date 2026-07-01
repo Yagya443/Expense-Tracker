@@ -39,7 +39,7 @@ const Expense = () => {
         return prev;
     }, {});
 
-    const fetchExpense = useCallback(async () => {
+    const fetchExpense = async () => {
         const token = localStorage.getItem("token");
 
         try {
@@ -57,7 +57,7 @@ const Expense = () => {
         } catch (error) {
             console.error(error);
         }
-    }, []);
+    }
 
     const handleSorting = () => {
         const sortedIncome = [...newExpense];
@@ -65,24 +65,24 @@ const Expense = () => {
         switch (toggleSelect) {
             case "a-z":
                 sortedIncome.sort((a, b) => {
-                    return a.category.localeCompare(b.category);
+                    return b.category.localeCompare(a.category);
                 });
                 break;
             case "z-a":
                 sortedIncome.sort((a, b) => {
-                    return b.category.localeCompare(a.category);
+                    return a.category.localeCompare(b.category);
                 });
 
                 break;
             case "price":
                 sortedIncome.sort((a, b) => {
-                    return b.amount - a.amount;
+                    return a.amount - b.amount;
                 });
 
                 break;
             case "pricedesc":
                 sortedIncome.sort((a, b) => {
-                    return a.amount - b.amount;
+                    return b.amount - a.amount;
                 });
 
                 break;

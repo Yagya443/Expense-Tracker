@@ -47,7 +47,7 @@ const Login = () => {
                         <input
                             onChange={(e) => setEmail(e.target.value)}
                             type="email"
-                            placeholder="abc@example.com"
+                            placeholder="abc@example.com (yagnaakv99@gmail.com)"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
                     </div>
@@ -60,7 +60,7 @@ const Login = () => {
                         <input
                             onChange={(e) => setPassword(e.target.value)}
                             type={showPassword ? "text" : "password"}
-                            placeholder="Enter password"
+                            placeholder="Enter password (123456)"
                             className="w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
 

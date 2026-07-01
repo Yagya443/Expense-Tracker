@@ -40,7 +40,7 @@ const Income = () => {
         }),
     );
 
-    const fetchIncome = useCallback(async () => {
+    const fetchIncome = async () => {
         const token = localStorage.getItem("token");
         try {
             const res = await axios.get(
@@ -56,7 +56,7 @@ const Income = () => {
         } catch (error) {
             console.error(error);
         }
-    }, []);
+    }
 
     // console.log(newIncome);
 
@@ -66,24 +66,24 @@ const Income = () => {
         switch (toggleSelect) {
             case "a-z":
                 sortedIncome.sort((a, b) => {
-                    return a.category.localeCompare(b.category);
+                    return b.category.localeCompare(a.category);
                 });
                 break;
             case "z-a":
                 sortedIncome.sort((a, b) => {
-                    return b.category.localeCompare(a.category);
+                    return a.category.localeCompare(b.category);
                 });
 
                 break;
             case "price":
                 sortedIncome.sort((a, b) => {
-                    return a.amount - b.amount;
+                    return b.amount - a.amount;
                 });
 
                 break;
             case "pricedesc":
                 sortedIncome.sort((a, b) => {
-                    return b.amount - a.amount;
+                    return a.amount - b.amount;
                 });
 
                 break;

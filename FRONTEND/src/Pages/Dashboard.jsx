@@ -17,7 +17,7 @@ const Dashboard = () => {
     const [totalIncome, setTotalIncome] = useState(0);
     const [totalExpense, setTotalExpense] = useState(0);
 
-    const fetchTotalIncome = useCallback(async () => {
+    const fetchTotalIncome = async () => {
         const token = localStorage.getItem("token");
 
         try {
@@ -29,13 +29,12 @@ const Dashboard = () => {
                     },
                 },
             );
-
             setTotalIncome(res.data.total);
         } catch (error) {
             console.error(error);
         }
-    }, []);
-    const fetchTotalExpense = useCallback(async () => {
+    }
+    const fetchTotalExpense = async () => {
         const token = localStorage.getItem("token");
 
         try {
@@ -52,7 +51,7 @@ const Dashboard = () => {
         } catch (error) {
             console.error(error);
         }
-    }, []);
+    }
 
     useEffect(() => {
         fetchTotalIncome();

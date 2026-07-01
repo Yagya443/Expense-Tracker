@@ -39,10 +39,7 @@ app.post("/", async (req, res) => {
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
             expiresIn: "1d",
-        });
-
-        console.log(token);
-        
+        });        
 
         res.json({
             message: "Login successful",
@@ -127,7 +124,6 @@ app.post("/expense", authMiddleware, async (req, res) => {
 
         const expense = new Expense({
             userId: req.user.id,
-
             amount,
             category,
             date: date || Date.now(),

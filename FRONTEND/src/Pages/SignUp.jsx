@@ -9,13 +9,7 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const navigate = useNavigate();
-
-    const imgRef = useRef();
-
-    const handleClick = () => {
-        imgRef.current.click();
-    };
+    const navigate = useNavigate();   
 
     const handleSignUp = async () => {
         try {
@@ -46,17 +40,6 @@ const Login = () => {
                     </p>
                 </div>
 
-                <div
-                    className="border left-1/2 relative -translate-x-1/2 h-14 w-14"
-                    onClick={handleClick}
-                >
-                    <input
-                        type="file"
-                        ref={imgRef}
-                        accept="image/* "
-                        className="hidden"
-                    />
-                </div>
 
                 <div className="space-y-4">
                     <div>
