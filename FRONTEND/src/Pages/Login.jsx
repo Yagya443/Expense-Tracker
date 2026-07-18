@@ -6,24 +6,28 @@ import axios from "axios";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
-
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
 
     const handleLogin = async () => {
+        setLoading(true);
+
         try {
             const res = await axios.post(`${import.meta.env.VITE_API_URL}/`, {
                 email,
                 password,
             });
 
-            localStorage.setItem("token", res.data.token);          
-            
+            localStorage.setItem("token", res.data.token);
+
             navigate("/dashboard");
         } catch (error) {
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -76,7 +80,11 @@ const Login = () => {
                         className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
                         onClick={handleLogin}
                     >
-                        Login
+                        {loading ? (
+                            <p className="opacity-25">Loading</p>
+                        ) : (
+                            <p>Login</p>
+                        )}
                     </button>
 
                     <p className="text-sm text-center text-gray-600">

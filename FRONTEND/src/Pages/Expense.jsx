@@ -23,6 +23,7 @@ const Expense = () => {
     const [expense, setExpense] = useState([]);
     const [newExpense, setNewExpense] = useState([]);
     const [toggleSelect, setToggleSelect] = useState("default");
+    const [loading, setLoading] = useState(false);
 
     const [openModel, setOpenModel] = useState(false);
 
@@ -40,6 +41,7 @@ const Expense = () => {
     }, {});
 
     const fetchExpense = async () => {
+        setLoading(true);
         const token = localStorage.getItem("token");
 
         try {
@@ -56,8 +58,10 @@ const Expense = () => {
             setNewExpense(res.data);
         } catch (error) {
             console.error(error);
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     const handleSorting = () => {
         const sortedIncome = [...newExpense];
@@ -112,150 +116,168 @@ const Expense = () => {
 
     return (
         <>
-            <Navbar />
+            {loading ? (
+                 <p className="flex items-center justify-center h-screen text-xl font-semibold text-[#7C3AED]">
+                    Loading...
+                </p>
+            ) : (
+                <>
+                    <Navbar />
+                    <div className="expense-page-container ml-64 pt-14 bg-gray-100 min-h-[100vh] pb-4">
+                        {openModel && (
+                            <ExpenseModel
+                                closeModal={() => setOpenModel(false)}
+                                refreshExpenses={fetchExpense}
+                            />
+                        )}
 
-            <div className="expense-page-container ml-64 pt-14 bg-gray-100 min-h-[100vh] pb-4">
-                {openModel && (
-                    <ExpenseModel
-                        closeModal={() => setOpenModel(false)}
-                        refreshExpenses={fetchExpense}
-                    />
-                )}
+                        <div className="expense-page-grid px-8 mt-8 grid grid-col-2 gap-8">
+                            {/* Expense Overview */}
+                            <div className="expense-overview-card bg-white w-full h-[500px] shadow-md rounded-md">
+                                <div className="expense-overview-header flex justify-between p-4">
+                                    <div className="expense-overview-title-section">
+                                        <h2 className="expense-overview-title text-xl">
+                                            Expense Overview
+                                        </h2>
 
-                <div className="expense-page-grid px-8 mt-8 grid grid-col-2 gap-8">
-                    {/* Expense Overview */}
-                    <div className="expense-overview-card bg-white w-full h-[500px] shadow-md rounded-md">
-                        <div className="expense-overview-header flex justify-between p-4">
-                            <div className="expense-overview-title-section">
-                                <h2 className="expense-overview-title text-xl">
-                                    Expense Overview
-                                </h2>
+                                        <h2 className="expense-overview-subtitle text-gray-500">
+                                            Track your spending trends over time
+                                            and gain insights into where your
+                                            money goes
+                                        </h2>
+                                    </div>
 
-                                <h2 className="expense-overview-subtitle text-gray-500">
-                                    Track your spending trends over time and
-                                    gain insights into where your money goes
-                                </h2>
+                                    <button
+                                        className="expense-add-btn border text-nowrap flex items-center h-8 px-4 py-2 rounded bg-violet-100 text-violet-700 font-semibold gap-2"
+                                        onClick={() => setOpenModel(true)}
+                                    >
+                                        <FaPlus className="expense-add-btn-icon" />
+                                        Add Expenses
+                                    </button>
+                                </div>
+
+                                {/* Chart */}
+                                <div className="expense-chart-container">
+                                    <ResponsiveContainer
+                                        width="100%"
+                                        height={400}
+                                    >
+                                        <LineChart data={convertChartData}>
+                                            <CartesianGrid
+                                                strokeDasharray="2 2"
+                                                className="expense-chart-grid"
+                                            />
+
+                                            <XAxis
+                                                dataKey="category"
+                                                className="expense-chart-xaxis"
+                                            />
+
+                                            <YAxis className="expense-chart-yaxis" />
+
+                                            <Tooltip className="expense-chart-tooltip" />
+
+                                            <Line
+                                                type="monotone"
+                                                dataKey="amount"
+                                                stroke="#7c3aed"
+                                                strokeWidth={2}
+                                                className="expense-chart-line"
+                                            />
+                                        </LineChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </div>
 
-                            <button
-                                className="expense-add-btn border text-nowrap flex items-center h-8 px-4 py-2 rounded bg-violet-100 text-violet-700 font-semibold gap-2"
-                                onClick={() => setOpenModel(true)}
-                            >
-                                <FaPlus className="expense-add-btn-icon" />
-                                Add Expenses
-                            </button>
-                        </div>
+                            {/* Expense List */}
+                            <div className="expense-list-card bg-white min-h-[100px] rounded-md shadow-md relative py-4 px-4">
+                                <h2 className="expense-list-title  text-2xl font-semibold">
+                                    All Expenses
+                                </h2>
 
-                        {/* Chart */}
-                        <div className="expense-chart-container">
-                            <ResponsiveContainer width="100%" height={400}>
-                                <LineChart data={convertChartData}>
-                                    <CartesianGrid
-                                        strokeDasharray="2 2"
-                                        className="expense-chart-grid"
-                                    />
-
-                                    <XAxis
-                                        dataKey="category"
-                                        className="expense-chart-xaxis"
-                                    />
-
-                                    <YAxis className="expense-chart-yaxis" />
-
-                                    <Tooltip className="expense-chart-tooltip" />
-
-                                    <Line
-                                        type="monotone"
-                                        dataKey="amount"
-                                        stroke="#7c3aed"
-                                        strokeWidth={2}
-                                        className="expense-chart-line"
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
-
-                    {/* Expense List */}
-                    <div className="expense-list-card bg-white min-h-[100px] rounded-md shadow-md relative py-4 px-4">
-                        <h2 className="expense-list-title  text-2xl font-semibold">
-                            All Expenses
-                        </h2>
-
-                        {/* Controls */}
-                        <div className="expense-controls absolute font-semibold right-4 top-4 flex gap-4">
-                            <select
-                                className="expense-sort-select border-black border rounded"
-                                onChange={(e) =>
-                                    setToggleSelect(e.target.value)
-                                }
-                            >
-                                <option value="default">Sort By</option>
-                                <option value="a-z">A-Z</option>
-                                <option value="z-a">Z-A</option>
-                                <option value="price">Price Low → High</option>
-                                <option value="pricedesc">
-                                    Price High → Low
-                                </option>
-                            </select>
-
-                            <button className="expense-download-btn px-2 py-1 flex items-center rounded bg-gray-200">
-                                <FiDownload
-                                    size={18}
-                                    className="expense-download-icon"
-                                />
-                                Download
-                            </button>
-                        </div>
-
-                        {/* Expense Grid */}
-                        <div className="expense-grid grid grid-cols-2 gap-2 mt-2">
-                            {expense && expense.length > 0 ? (
-                                [...newExpense].reverse().slice(0,12).map((expense, idx) => (
-                                    <div
-                                        key={expense._id}
-                                        className="expense-card flex justify-between items-center gap-4 px-6 py-2"
+                                {/* Controls */}
+                                <div className="expense-controls absolute font-semibold right-4 top-4 flex gap-4">
+                                    <select
+                                        className="expense-sort-select border-black border rounded"
+                                        onChange={(e) =>
+                                            setToggleSelect(e.target.value)
+                                        }
                                     >
-                                        <div className="expense-card-left flex items-center gap-4">
-                                            <div className="expense-card-icon h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
-                                                {getExpenseEmoji(
-                                                    expense.category,
-                                                )}
-                                            </div>
+                                        <option value="default">Sort By</option>
+                                        <option value="a-z">A-Z</option>
+                                        <option value="z-a">Z-A</option>
+                                        <option value="price">
+                                            Price Low → High
+                                        </option>
+                                        <option value="pricedesc">
+                                            Price High → Low
+                                        </option>
+                                    </select>
 
-                                            <div className="expense-card-info">
-                                                <h1 className="expense-card-category text-xl">
-                                                    {expense.category}
-                                                </h1>
+                                    <button className="expense-download-btn px-2 py-1 flex items-center rounded bg-gray-200">
+                                        <FiDownload
+                                            size={18}
+                                            className="expense-download-icon"
+                                        />
+                                        Download
+                                    </button>
+                                </div>
 
-                                                <h1 className="expense-card-date text-md text-gray-500">
-                                                    {getStartOfDay(
-                                                        expense.createdAt,
+                                {/* Expense Grid */}
+                                <div className="expense-grid grid grid-cols-2 gap-2 mt-2">
+                                    {expense && expense.length > 0 ? (
+                                        [...newExpense]
+                                            .reverse()
+                                            .slice(0, 12)
+                                            .map((expense, idx) => (
+                                                <div
+                                                    key={expense._id}
+                                                    className="expense-card flex justify-between items-center gap-4 px-6 py-2"
+                                                >
+                                                    <div className="expense-card-left flex items-center gap-4">
+                                                        <div className="expense-card-icon h-12 rounded-full w-12 border text-4xl bg-gray-200 text-center">
+                                                            {getExpenseEmoji(
+                                                                expense.category,
+                                                            )}
+                                                        </div>
+
+                                                        <div className="expense-card-info">
+                                                            <h1 className="expense-card-category text-xl">
+                                                                {
+                                                                    expense.category
+                                                                }
+                                                            </h1>
+
+                                                            <h1 className="expense-card-date text-md text-gray-500">
+                                                                {getStartOfDay(
+                                                                    expense.createdAt,
+                                                                )}
+                                                            </h1>
+                                                        </div>
+                                                    </div>
+
+                                                    {expense.amount > 0 ? (
+                                                        <div className="expense-card-amount expense-positive bg-green-200 text-green-600 rounded font-semibold px-4">
+                                                            ${expense.amount}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="expense-card-amount expense-negative bg-red-200 text-red-600 rounded font-semibold px-4">
+                                                            ${expense.amount}
+                                                        </div>
                                                     )}
-                                                </h1>
-                                            </div>
-                                        </div>
-
-                                        {expense.amount > 0 ? (
-                                            <div className="expense-card-amount expense-positive bg-green-200 text-green-600 rounded font-semibold px-4">
-                                                ${expense.amount}
-                                            </div>
-                                        ) : (
-                                            <div className="expense-card-amount expense-negative bg-red-200 text-red-600 rounded font-semibold px-4">
-                                                ${expense.amount}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))
-                            ) : (
-                                <h1 className="expense-empty-state text-2xl font-semibold absolute left-1/2 -translate-x-1/2">
-                                    Enter Something
-                                </h1>
-                            )}
+                                                </div>
+                                            ))
+                                    ) : (
+                                        <h1 className="expense-empty-state text-2xl font-semibold absolute left-1/2 -translate-x-1/2">
+                                            Enter Something
+                                        </h1>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </>
+            )}
         </>
     );
 };

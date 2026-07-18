@@ -8,10 +8,16 @@ const Login = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+        const [loading, setLoading] = useState(false);
+    
 
     const navigate = useNavigate();   
 
     const handleSignUp = async () => {
+
+        setLoading(true);
+
+
         try {
             const res = await axios.post(
                 `${import.meta.env.VITE_API_URL}/signup`,
@@ -27,6 +33,8 @@ const Login = () => {
             navigate("/dashboard");
         } catch (error) {
             console.log(error.response?.data || error.message);
+        }finally {
+            setLoading(false);
         }
     };
 
@@ -89,7 +97,11 @@ const Login = () => {
                         className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
                         onClick={handleSignUp}
                     >
-                        Sign In
+                         {loading ? (
+                            <p className="opacity-25">Loading</p>
+                        ) : (
+                            <p>Sign Up</p>
+                        )}
                     </button>
 
                     <p className="text-sm text-center text-gray-600">

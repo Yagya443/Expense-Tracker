@@ -16,8 +16,10 @@ import axios from "axios";
 const Dashboard = () => {
     const [totalIncome, setTotalIncome] = useState(0);
     const [totalExpense, setTotalExpense] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     const fetchTotalIncome = async () => {
+        setLoading(true);
         const token = localStorage.getItem("token");
 
         try {
@@ -32,9 +34,13 @@ const Dashboard = () => {
             setTotalIncome(res.data.total);
         } catch (error) {
             console.error(error);
+        } finally {
+            setLoading(false);
         }
-    }
+    };
     const fetchTotalExpense = async () => {
+        setLoading(true);
+
         const token = localStorage.getItem("token");
 
         try {
@@ -50,8 +56,10 @@ const Dashboard = () => {
             setTotalExpense(res.data.total);
         } catch (error) {
             console.error(error);
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
         fetchTotalIncome();
@@ -60,87 +68,92 @@ const Dashboard = () => {
 
     return (
         <>
-            <Navbar />
+            {loading ? (
+                <p className="flex items-center justify-center h-screen text-xl font-semibold text-[#7C3AED]">
+                    Loading...
+                </p>
+            ) : (
+                <>
+                    <Navbar />
+                    <div className="dashboard-container ml-64 pt-20 bg-gray-100 min-h-[100vh] pb-4">
+                        <div className="dashboard-summary-grid grid grid-cols-3 px-8 gap-4">
+                            <div className="dashboard-card total-balance-card bg-white rounded-xl h-24 flex gap-4 items-center pl-4 shadow-lg">
+                                <div className="dashboard-card-icon total-balance-icon bg-violet-500 h-16 flex items-center justify-center w-16 rounded-full">
+                                    <IoMdCard size={40} />
+                                </div>
 
-            <div className="dashboard-container ml-64 pt-20 bg-gray-100 min-h-[100vh] pb-4">
-                
-                <div className="dashboard-summary-grid grid grid-cols-3 px-8 gap-4">
-                    
-                    <div className="dashboard-card total-balance-card bg-white rounded-xl h-24 flex gap-4 items-center pl-4 shadow-lg">
-                        <div className="dashboard-card-icon total-balance-icon bg-violet-500 h-16 flex items-center justify-center w-16 rounded-full">
-                            <IoMdCard size={40} />
+                                <div className="dashboard-card-content">
+                                    <p className="dashboard-card-title text-xl text-gray-700">
+                                        Total Balance
+                                    </p>
+
+                                    <h2 className="dashboard-card-amount text-2xl font-semibold">
+                                        ${totalIncome + totalExpense}
+                                    </h2>
+                                </div>
+                            </div>
+
+                            <div className="dashboard-card total-income-card bg-white rounded-xl h-24 flex gap-4 items-center pl-4 shadow-lg">
+                                <div className="dashboard-card-icon total-income-icon bg-yellow-400 h-16 flex items-center justify-center w-16 rounded-full">
+                                    <CiWallet size={40} />
+                                </div>
+
+                                <div className="dashboard-card-content">
+                                    <p className="dashboard-card-title text-xl text-gray-700">
+                                        Total Income
+                                    </p>
+
+                                    <h2 className="dashboard-card-amount text-2xl font-semibold">
+                                        ${totalIncome}
+                                    </h2>
+                                </div>
+                            </div>
+
+                            <div className="dashboard-card total-expense-card bg-white rounded-xl h-24 flex gap-4 items-center pl-4 shadow-lg">
+                                <div className="dashboard-card-icon total-expense-icon bg-red-500 h-16 flex items-center justify-center w-16 rounded-full">
+                                    <GiReceiveMoney size={40} />
+                                </div>
+
+                                <div className="dashboard-card-content">
+                                    <p className="dashboard-card-title text-xl text-gray-700">
+                                        Total Expense
+                                    </p>
+
+                                    <h2 className="dashboard-card-amount text-2xl font-semibold">
+                                        ${Math.abs(totalExpense)}
+                                    </h2>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="dashboard-card-content">
-                            <p className="dashboard-card-title text-xl text-gray-700">
-                                Total Balance
-                            </p>
+                        <div className="dashboard-content-grid px-8 mt-8 grid grid-cols-2 gap-8 z-50">
+                            <div className="dashboard-widget recent-transaction-widget bg-white min-h-[300px] rounded-md relative py-4 px-4 shadow-md">
+                                <DashBoardRecent />
+                            </div>
 
-                            <h2 className="dashboard-card-amount text-2xl font-semibold">
-                                ${totalIncome + totalExpense}
-                            </h2>
+                            <div className="dashboard-widget piechart-widget bg-white min-h-[500px] rounded-md shadow-md">
+                                <PieChart />
+                            </div>
+
+                            <div className="dashboard-widget bargraph-widget bg-white min-h-[400px] rounded-md relative py-4 px-2 shadow-md">
+                                <Bargraph />
+                            </div>
+
+                            <div className="dashboard-widget expense-widget bg-white min-h-[400px] rounded-md relative py-4 px-4 shadow-md">
+                                <DashboardExpense />
+                            </div>
+
+                            <div className="dashboard-widget income-widget bg-white min-h-[400px] rounded-md relative py-4 px-4 shadow-md">
+                                <DashboardIncome />
+                            </div>
+
+                            <div className="dashboard-widget income-graph-widget bg-white min-h-[400px] rounded-md relative py-4 px-2 shadow-md">
+                                <IncomeGraph />
+                            </div>
                         </div>
                     </div>
-
-                    <div className="dashboard-card total-income-card bg-white rounded-xl h-24 flex gap-4 items-center pl-4 shadow-lg">
-                        <div className="dashboard-card-icon total-income-icon bg-yellow-400 h-16 flex items-center justify-center w-16 rounded-full">
-                            <CiWallet size={40} />
-                        </div>
-
-                        <div className="dashboard-card-content">
-                            <p className="dashboard-card-title text-xl text-gray-700">
-                                Total Income
-                            </p>
-
-                            <h2 className="dashboard-card-amount text-2xl font-semibold">
-                                ${totalIncome}
-                            </h2>
-                        </div>
-                    </div>
-
-                    <div className="dashboard-card total-expense-card bg-white rounded-xl h-24 flex gap-4 items-center pl-4 shadow-lg">
-                        <div className="dashboard-card-icon total-expense-icon bg-red-500 h-16 flex items-center justify-center w-16 rounded-full">
-                            <GiReceiveMoney size={40} />
-                        </div>
-
-                        <div className="dashboard-card-content">
-                            <p className="dashboard-card-title text-xl text-gray-700">
-                                Total Expense
-                            </p>
-
-                            <h2 className="dashboard-card-amount text-2xl font-semibold">
-                                ${Math.abs(totalExpense)}
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="dashboard-content-grid px-8 mt-8 grid grid-cols-2 gap-8 z-50">
-                    <div className="dashboard-widget recent-transaction-widget bg-white min-h-[300px] rounded-md relative py-4 px-4 shadow-md">
-                        <DashBoardRecent />
-                    </div>
-
-                    <div className="dashboard-widget piechart-widget bg-white min-h-[500px] rounded-md shadow-md">
-                        <PieChart />
-                    </div>
-
-                    <div className="dashboard-widget bargraph-widget bg-white min-h-[400px] rounded-md relative py-4 px-2 shadow-md">
-                        <Bargraph />
-                    </div>
-
-                    <div className="dashboard-widget expense-widget bg-white min-h-[400px] rounded-md relative py-4 px-4 shadow-md">
-                        <DashboardExpense />
-                    </div>
-
-                    <div className="dashboard-widget income-widget bg-white min-h-[400px] rounded-md relative py-4 px-4 shadow-md">
-                        <DashboardIncome />
-                    </div>
-
-                    <div className="dashboard-widget income-graph-widget bg-white min-h-[400px] rounded-md relative py-4 px-2 shadow-md">
-                        <IncomeGraph />
-                    </div>
-                </div>
-            </div>
+                </>
+            )}
         </>
     );
 };
